@@ -1560,13 +1560,24 @@
       .industries-grid { grid-template-columns: 1fr 1fr; }
       .insights-grid { grid-template-columns: 1fr; }
       .insight-body { padding: 20px; }
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+      .footer-grid { grid-template-columns: 1fr 1fr 1fr; gap: 32px 24px; }
       .footer-brand { grid-column: 1 / -1; }
       .stats-bar-inner { grid-template-columns: repeat(2, 1fr); padding: 0 24px; }
       .stat-item:nth-child(4) { border-top: 1px solid rgba(255,255,255,0.15); }
       .hero-stat-card { display: none; }
       .demo-form-wrap { padding: 28px 20px; }
       .hero-trust p { font-size: 12px; }
+    }
+
+    @media (max-width: 480px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 28px 0; }
+      .footer-brand { grid-column: auto; }
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .footer-bottom-links { gap: 16px; }
     }
 
     /* ─── ANIMATIONS ─────────────────────────────────────── */
