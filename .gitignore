@@ -1,0 +1,32 @@
+# Claude Code
+.claude/
+CLAUDE*.md
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+build_industry_pages.py
+screenshot.py
+screenshots/
+
+# Environment & secrets
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.*
+credentials.*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
