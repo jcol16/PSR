@@ -44,6 +44,8 @@
       -webkit-backdrop-filter: blur(12px);
       border-bottom: none;
       transition: box-shadow 0.3s ease, background 0.3s ease;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
     nav::after {
       content: '';
@@ -121,6 +123,8 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       z-index: 1;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
     .nav-links > li { position: relative; }
     .nav-links > li > a {
@@ -1462,6 +1466,8 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       transition: background 0.2s, box-shadow 0.2s;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
     .nav-hamburger:hover {
       background: rgba(255,255,255,0.85);
@@ -1493,6 +1499,8 @@
       overflow-y: auto;
       max-height: calc(100vh - 72px);
       box-shadow: 0 8px 24px rgba(26,26,36,0.08);
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
     .mobile-nav.open { display: block; }
     .mobile-nav-section { border-bottom: 1px solid var(--border); }
@@ -2527,6 +2535,41 @@
         mobileNav.setAttribute('aria-hidden', true);
         document.body.style.overflow = '';
       });
+    });
+
+    // Reset mobile nav state when crossing mobile/desktop breakpoint, and
+    // force-repaint backdrop-filter elements on iOS Safari after orientation change
+    function closeMobileNavIfDesktop() {
+      if (window.innerWidth > 768) {
+        mobileNav.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileNav.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function repaintBackdropFilters() {
+      // iOS Safari drops backdrop-filter after orientation change unless we nudge the elements
+      [nav, document.querySelector('.nav-links'), mobileNav, hamburger].forEach(el => {
+        if (!el) return;
+        const wbf = el.style.webkitBackdropFilter;
+        el.style.webkitBackdropFilter = 'none';
+        // eslint-disable-next-line no-unused-expressions
+        el.offsetHeight; // force reflow
+        el.style.webkitBackdropFilter = wbf;
+      });
+    }
+
+    window.addEventListener('resize', closeMobileNavIfDesktop, { passive: true });
+
+    window.addEventListener('orientationchange', () => {
+      // orientationchange fires before the viewport dimensions update on iOS,
+      // so defer both operations until after the browser has repainted
+      setTimeout(() => {
+        closeMobileNavIfDesktop();
+        repaintBackdropFilters();
+      }, 150);
     });
 
     // Intersection observer for fade-up animations
