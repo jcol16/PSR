@@ -39,10 +39,11 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(255,255,255,0.97);
+      background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: none;
-      transition: box-shadow 0.3s;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
     }
     nav::after {
       content: '';
@@ -53,7 +54,19 @@
       opacity: 0.85;
       box-shadow: 0 0 8px rgba(137,42,61,0.6), 0 0 20px rgba(195,164,76,0.35), 0 0 40px rgba(137,42,61,0.2);
     }
-    nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+    nav.scrolled {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    nav.nav--light .nav-logo-text .name,
+    nav.nav--light .nav-logo-text .tag {
+      color: var(--ink);
+    }
+    nav.nav--light .nav-links > li > a {
+      color: var(--ink);
+    }
+    nav.nav--light .has-dropdown > a::after {
+      background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%231A1A24' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    }
 
     .nav-inner {
       max-width: 1280px;
@@ -85,36 +98,43 @@
       font-family: 'DM Sans', sans-serif;
       font-weight: 600;
       font-size: 15px;
-      color: var(--ink);
+      color: var(--white);
       letter-spacing: -0.01em;
     }
     .nav-logo-text .tag {
       font-family: 'EB Garamond', serif;
       font-style: italic;
       font-size: 12px;
-      color: var(--crimson);
+      color: var(--white);
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 0;
       list-style: none;
+      background: rgba(255,255,255,0.55);
+      border-radius: 9999px;
+      padding: 4px;
+      border: 1px solid rgba(90,90,107,0.13);
+      box-shadow: 0 2px 12px rgba(26,26,36,0.05), inset 0 1px 0 rgba(255,255,255,0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
     .nav-links > li { position: relative; }
     .nav-links > li > a {
       font-family: 'Inter', sans-serif;
       font-weight: 500;
       font-size: 13px;
-      color: var(--slate);
+      color: var(--white);
       text-decoration: none;
       letter-spacing: 0.01em;
-      transition: color 0.2s;
+      transition: color 0.2s, background 0.2s;
       padding: 8px 12px;
       display: flex;
       align-items: center;
       gap: 5px;
-      border-radius: 4px;
+      border-radius: 9999px;
       white-space: nowrap;
     }
     .nav-links > li > a:hover { color: var(--crimson); background: rgba(137,42,61,0.05); }
@@ -125,7 +145,7 @@
       display: inline-block;
       width: 8px;
       height: 5px;
-      background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%235A5A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%23FFFFFF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: center;
       transition: transform 0.2s;
@@ -190,10 +210,10 @@
       background: var(--crimson);
       color: var(--white) !important;
       padding: 9px 18px;
-      border-radius: 4px;
+      border-radius: 9999px;
       font-weight: 600 !important;
       font-size: 13px !important;
-      margin-left: 8px;
+      margin-left: 4px;
       box-shadow: 0 0 8px rgba(137,42,61,0.28), 0 0 16px rgba(137,42,61,0.1);
       transition: background 0.2s, box-shadow 0.2s, transform 0.15s !important;
     }
@@ -277,6 +297,12 @@
     .hero h1 strong {
       font-weight: 700;
       display: block;
+      background: linear-gradient(135deg, #C94060 0%, #892A3D 45%, #D4556E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 32px rgba(137, 42, 61, 0.75)) drop-shadow(0 0 12px rgba(201, 64, 96, 0.5));
     }
 
     .hero-sub-italic {
@@ -1421,21 +1447,28 @@
     .nav-hamburger {
       display: none;
       flex-direction: column;
+      align-items: center;
       justify-content: center;
       gap: 5px;
-      width: 44px;
-      height: 44px;
-      background: none;
-      border: none;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(90,90,107,0.13);
       cursor: pointer;
-      padding: 8px;
-      border-radius: 4px;
-      transition: background 0.2s;
+      padding: 0;
+      border-radius: 9999px;
+      box-shadow: 0 2px 8px rgba(26,26,36,0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background 0.2s, box-shadow 0.2s;
     }
-    .nav-hamburger:hover { background: rgba(137,42,61,0.06); }
+    .nav-hamburger:hover {
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 2px 12px rgba(137,42,61,0.1);
+    }
     .nav-hamburger span {
       display: block;
-      width: 22px;
+      width: 18px;
       height: 1.5px;
       background: var(--ink);
       border-radius: 2px;
@@ -1450,13 +1483,15 @@
       position: fixed;
       top: 72px;
       left: 0; right: 0;
-      background: var(--white);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(28px) saturate(1.8) brightness(1.04);
+      -webkit-backdrop-filter: blur(28px) saturate(1.8) brightness(1.04);
+      border-top: 1px solid rgba(255,255,255,0.45);
+      border-bottom: 1px solid rgba(26,26,36,0.06);
       z-index: 99;
       overflow-y: auto;
       max-height: calc(100vh - 72px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 24px rgba(26,26,36,0.08);
     }
     .mobile-nav.open { display: block; }
     .mobile-nav-section { border-bottom: 1px solid var(--border); }
@@ -1525,7 +1560,8 @@
       .industries-grid { grid-template-columns: 1fr 1fr; }
       .insights-grid { grid-template-columns: 1fr; }
       .insight-body { padding: 20px; }
-      .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+      .footer-brand { grid-column: 1 / -1; }
       .stats-bar-inner { grid-template-columns: repeat(2, 1fr); padding: 0 24px; }
       .stat-item:nth-child(4) { border-top: 1px solid rgba(255,255,255,0.15); }
       .hero-stat-card { display: none; }
@@ -1823,7 +1859,7 @@
   </div>
 
   <!-- ─── HERO ─── -->
-  <section class="hero">
+  <section class="hero" data-nav-theme="dark">
     <div class="hero-bg"></div>
     <div class="hero-grid"></div>
     <div class="hero-inner">
@@ -1902,7 +1938,7 @@
   </div>
 
   <!-- ─── ABOUT ─── -->
-  <section class="about" id="about">
+  <section class="about" id="about" data-nav-theme="light">
     <div class="container">
       <div class="about-grid">
         <div class="fade-up">
@@ -1987,7 +2023,7 @@
   </section>
 
   <!-- ─── INDUSTRIES ─── -->
-  <section class="industries" id="industries">
+  <section class="industries" id="industries" data-nav-theme="light">
     <div class="container">
       <div class="section-eyebrow fade-up">Industries We Serve</div>
       <h2 class="section-title fade-up fade-up-delay-1">Built for the full<br /><strong>powertrain ecosystem.</strong></h2>
@@ -2035,7 +2071,7 @@
   </section>
 
   <!-- ─── DATA INTELLIGENCE ─── -->
-  <section class="data-intelligence" id="data">
+  <section class="data-intelligence" id="data" data-nav-theme="dark">
     <div class="container">
       <div class="data-grid">
         <div class="data-content fade-up">
@@ -2137,7 +2173,7 @@
 
   
   <!-- ─── INSIGHTS ─── -->
-  <section class="insights" id="insights">
+  <section class="insights" id="insights" data-nav-theme="light">
     <div class="container">
       <div class="insights-header">
         <div>
@@ -2238,7 +2274,7 @@
   </section>
 
   <!-- ─── TESTIMONIAL ─── -->
-  <section class="testimonial-section">
+  <section class="testimonial-section" data-nav-theme="light">
     <div class="testimonial-bg-deco"></div>
     <div class="testimonial-inner fade-up">
       <span class="testimonial-open-quote">"</span>
@@ -2252,8 +2288,8 @@
   </section>
 
   <!-- ─── CTA ─── -->
-  <section class="cta-section" id="contact">
-    <div class="container" style="padding-top: 0; padding-bottom: 0;">
+  <section class="cta-section" id="contact" data-nav-theme="dark">
+    <div class="container" style="padding-top: 80px; padding-bottom: 0;">
       <div class="cta-inner">
 
         <!-- Left: copy -->
@@ -2437,6 +2473,20 @@
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 20);
     }, { passive: true });
+
+    // Nav theme — switch text dark/light based on section background
+    const navThemeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const theme = entry.target.dataset.navTheme;
+          nav.classList.toggle('nav--light', theme === 'light');
+        }
+      });
+    }, {
+      rootMargin: '-72px 0px -90% 0px', // trigger when section top crosses the nav
+      threshold: 0
+    });
+    document.querySelectorAll('[data-nav-theme]').forEach(s => navThemeObserver.observe(s));
 
     // Mobile hamburger
     const hamburger = document.getElementById('nav-hamburger');
