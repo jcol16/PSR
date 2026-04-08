@@ -45,15 +45,19 @@
       border-bottom: none;
       transition: box-shadow 0.3s ease, background 0.3s ease;
     }
-    nav::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
+    nav::after { content: none; }
+
+    /* Glow line rendered as a sibling element to escape nav's stacking context */
+    #nav-glow {
+      position: fixed;
+      top: 72px;
+      left: 0; right: 0;
       height: 2px;
       background: linear-gradient(90deg, transparent 0%, var(--crimson) 20%, var(--gold) 50%, var(--crimson) 80%, transparent 100%);
       opacity: 0.85;
       box-shadow: 0 0 8px rgba(137,42,61,0.6), 0 0 20px rgba(195,164,76,0.35), 0 0 40px rgba(137,42,61,0.2);
-      z-index: 201;
+      z-index: 150;
+      pointer-events: none;
     }
     nav.scrolled {
       background: rgba(255, 255, 255, 0.06);
@@ -1825,6 +1829,7 @@
       </button>
     </div>
   </nav>
+  <div id="nav-glow"></div>
 
   <!-- ─── MOBILE NAV ─── -->
   <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
