@@ -1391,8 +1391,19 @@
 
     /* ─── RESPONSIVE ─────────────────────────────────────── */
     @media (max-width: 1024px) {
-      .hero-inner { grid-template-columns: 1fr; gap: 60px; }
-      .hero-chart-wrapper { width: 360px; height: 360px; }
+      .hero-inner { display: block; }
+      .hero-visual {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.28;
+      }
+      .hero-content { position: relative; z-index: 1; }
+      .hero-chart-wrapper { width: 440px; height: 440px; }
       .about-grid { grid-template-columns: 1fr; }
       .data-grid { grid-template-columns: 1fr; }
       .solutions-grid { grid-template-columns: 1fr; }
@@ -1496,8 +1507,19 @@
       .nav-inner { padding: 0 24px; }
       .container { padding: 0 24px; }
       section { padding: 60px 0; }
-      .hero-inner { padding: 72px 24px 48px; }
-      .hero-chart-wrapper { width: 100%; max-width: 300px; height: 300px; margin-left: auto; margin-right: auto; }
+      .hero-inner { padding: 72px 24px 48px; display: block; }
+      .hero-visual {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.28;
+      }
+      .hero-content { position: relative; z-index: 1; }
+      .hero-chart-wrapper { width: 340px; height: 340px; max-width: none; margin: 0; }
       .about-pillars { grid-template-columns: 1fr; }
       .about-image-block { padding: 28px; }
       .industries-grid { grid-template-columns: 1fr 1fr; }
