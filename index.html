@@ -1590,6 +1590,21 @@
     }
     .client-wordmark:hover { color: var(--slate); }
 
+    @media (max-width: 768px) {
+      .clients-bar { padding: 20px 0; }
+      .clients-bar-label { font-size: 9px; padding: 0 20px; margin-bottom: 14px; }
+      .clients-track {
+        flex-wrap: wrap;
+        gap: 10px 20px;
+        padding: 0 20px;
+        overflow: visible;
+      }
+      .client-wordmark {
+        font-size: 10.5px;
+        flex-shrink: 1;
+      }
+    }
+
     /* ─── TESTIMONIAL ────────────────────────────────────── */
     .testimonial-section {
       background: var(--off-white);
