@@ -2485,19 +2485,21 @@
       nav.classList.toggle('scrolled', window.scrollY > 20);
     }, { passive: true });
 
-    // Nav theme — switch text dark/light based on section background
-    const navThemeObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const theme = entry.target.dataset.navTheme;
-          nav.classList.toggle('nav--light', theme === 'light');
+    // Nav theme — switch text dark/light based on which section is under the nav
+    const themedSections = Array.from(document.querySelectorAll('[data-nav-theme]'));
+    function updateNavTheme() {
+      const navBottom = nav.getBoundingClientRect().bottom;
+      let theme = 'dark';
+      themedSections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= navBottom && rect.bottom > navBottom) {
+          theme = section.dataset.navTheme;
         }
       });
-    }, {
-      rootMargin: '-72px 0px -90% 0px', // trigger when section top crosses the nav
-      threshold: 0
-    });
-    document.querySelectorAll('[data-nav-theme]').forEach(s => navThemeObserver.observe(s));
+      nav.classList.toggle('nav--light', theme === 'light');
+    }
+    window.addEventListener('scroll', updateNavTheme, { passive: true });
+    updateNavTheme();
 
     // Mobile hamburger
     const hamburger = document.getElementById('nav-hamburger');
