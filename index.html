@@ -1575,8 +1575,8 @@
     }
 
     @media (max-width: 480px) {
-      .footer-grid { grid-template-columns: 1fr; gap: 28px 0; }
-      .footer-brand { grid-column: auto; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
+      .footer-brand { grid-column: 1 / -1; }
       .footer-bottom {
         flex-direction: column;
         align-items: flex-start;
