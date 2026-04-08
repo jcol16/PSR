@@ -1,0 +1,2742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Power Systems Research — Powerful Possibilities™</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=EB+Garamond:ital,wght@1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --crimson:   #892A3D;
+      --crimson-dark: #6B1F2E;
+      --crimson-light: #A83348;
+      --gold:      #C3A44C;
+      --gold-light: #D4B86A;
+      --slate:     #5A5A6B;
+      --slate-dark: #3A3A47;
+      --off-white: #F7F5F2;
+      --white:     #FFFFFF;
+      --ink:       #1A1A24;
+      --mid-gray:  #8A8A96;
+      --border:    #E2DDD8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAVIGATION ─────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: none;
+      transition: box-shadow 0.3s;
+    }
+    nav::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--crimson) 20%, var(--gold) 50%, var(--crimson) 80%, transparent 100%);
+      opacity: 0.85;
+      box-shadow: 0 0 8px rgba(137,42,61,0.6), 0 0 20px rgba(195,164,76,0.35), 0 0 40px rgba(137,42,61,0.2);
+    }
+    nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 40px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      height: 40px;
+      width: auto;
+      filter: brightness(1.15) contrast(1.05);
+    }
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .nav-logo-text .name {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .nav-logo-text .tag {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 12px;
+      color: var(--crimson);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+    .nav-links > li { position: relative; }
+    .nav-links > li > a {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--slate);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .nav-links > li > a:hover { color: var(--crimson); background: rgba(137,42,61,0.05); }
+
+    /* Dropdown chevron */
+    .has-dropdown > a::after {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 5px;
+      background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%235A5A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .has-dropdown:hover > a::after { transform: rotate(180deg); }
+    .has-dropdown:hover > a { color: var(--crimson); }
+
+    /* Dropdown panel */
+    .dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+      min-width: 220px;
+      padding: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(6px);
+      transition: opacity 0.2s cubic-bezier(0.16,1,0.3,1), transform 0.2s cubic-bezier(0.16,1,0.3,1), visibility 0.2s;
+      z-index: 200;
+    }
+    .has-dropdown:hover .dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--ink) !important;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .dropdown a:hover { background: rgba(137,42,61,0.06); color: var(--crimson) !important; }
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 6px 0;
+    }
+    .dropdown-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      padding: 6px 12px 4px;
+    }
+
+    .nav-cta {
+      background: var(--crimson);
+      color: var(--white) !important;
+      padding: 9px 18px;
+      border-radius: 4px;
+      font-weight: 600 !important;
+      font-size: 13px !important;
+      margin-left: 8px;
+      box-shadow: 0 0 8px rgba(137,42,61,0.28), 0 0 16px rgba(137,42,61,0.1);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s !important;
+    }
+    .nav-cta:hover {
+      background: var(--crimson-dark) !important;
+      color: var(--white) !important;
+      box-shadow: 0 0 12px rgba(137,42,61,0.4), 0 0 24px rgba(137,42,61,0.18) !important;
+      transform: translateY(-1px);
+    }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    .hero {
+      min-height: 0;
+      padding: 0;
+      background: var(--ink);
+      display: flex;
+      align-items: flex-start;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(137,42,61,0.22) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(195,164,76,0.08) 0%, transparent 60%);
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 104px 40px 40px;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--gold);
+    }
+
+    .hero h1 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: clamp(34px, 4vw, 54px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .hero h1 strong {
+      font-weight: 700;
+      display: block;
+    }
+
+    .hero-sub-italic {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: clamp(20px, 2.5vw, 28px);
+      color: var(--crimson);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.62);
+      max-width: 480px;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--crimson);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--crimson-light); transform: translateY(-1px); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: rgba(255,255,255,0.8);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      padding: 13px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.6); color: var(--white); }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .hero-chart-wrapper {
+      position: relative;
+      width: 480px;
+      height: 480px;
+      margin-top: -40px;
+    }
+
+    #psr-globe {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      display: block;
+    }
+    #psr-globe:active { cursor: grabbing; }
+
+    .hero-stat-card {
+      position: absolute;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 8px;
+      padding: 16px 20px;
+    }
+    .hero-stat-card.card-1 { bottom: 40px; left: -20px; }
+    .hero-stat-card.card-2 { top: 60px; right: -10px; }
+    .hero-stat-card .stat-num {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: var(--white);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .hero-stat-card .stat-num span { color: var(--gold); }
+    .hero-stat-card .stat-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-trust {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .hero-trust-line {
+      width: 1px;
+      height: 36px;
+      background: rgba(255,255,255,0.15);
+    }
+    .hero-trust p {
+      margin: 0;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.5;
+    }
+    .hero-trust p strong { color: rgba(255,255,255,0.7); display: block; font-size: 13px; }
+
+    /* ─── STATS BAR ──────────────────────────────────────── */
+    .stats-bar {
+      background: var(--crimson);
+      padding: 0;
+    }
+    .stats-bar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .stat-item {
+      padding: 10px 20px;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.15);
+      position: relative;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item .num {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 40px;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-item .num sup {
+      font-size: 22px;
+      color: var(--gold-light);
+      vertical-align: super;
+    }
+    .stat-item .label {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      font-weight: 500;
+    }
+
+    /* ─── SECTION SHARED ─────────────────────────────────── */
+    section { padding: 80px 0; }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 16px;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: var(--crimson);
+    }
+    .section-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: clamp(32px, 4vw, 48px);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .section-title strong { font-weight: 700; }
+    .section-lead {
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--slate);
+      max-width: 560px;
+      margin-top: 16px;
+    }
+
+    /* ─── ABOUT ──────────────────────────────────────────── */
+    .about { background: var(--off-white); padding-top: 48px; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: flex-start;
+    }
+    .about-quote {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: clamp(22px, 3vw, 32px);
+      line-height: 1.45;
+      color: var(--ink);
+      margin: 28px 0;
+      padding-left: 24px;
+      border-left: 3px solid var(--crimson);
+    }
+    .about-body {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--slate);
+      margin-bottom: 20px;
+    }
+    .about-since {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+    }
+    .about-since::before {
+      content: '';
+      width: 32px;
+      height: 1.5px;
+      background: var(--gold);
+    }
+
+    .about-visual {
+      position: relative;
+    }
+    .about-image-block {
+      background: var(--ink);
+      border-radius: 8px;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-image-block::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(137,42,61,0.3) 0%, transparent 70%);
+    }
+    .about-image-block svg {
+      width: 100%;
+      height: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-pillars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .pillar {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px;
+    }
+    .pillar-icon {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 12px;
+      color: var(--crimson);
+    }
+    .pillar h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .pillar p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--mid-gray);
+    }
+
+    /* ─── SOLUTIONS ──────────────────────────────────────── */
+    .solutions { background: var(--white); }
+    .solutions-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 56px;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .solution-card {
+      background: var(--white);
+      padding: 44px 36px;
+      position: relative;
+      transition: background 0.25s;
+      cursor: default;
+    }
+    .solution-card:hover { background: var(--off-white); }
+    .solution-card.featured {
+      background: var(--ink);
+      color: var(--white);
+    }
+    .solution-card.featured:hover { background: var(--slate-dark); }
+
+    .solution-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 24px;
+    }
+    .solution-card h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+    .solution-card.featured h3 { color: var(--white); }
+    .solution-card p {
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: var(--slate);
+      margin-bottom: 28px;
+    }
+    .solution-card.featured p { color: rgba(255,255,255,0.6); }
+
+    .solution-tag {
+      display: inline-block;
+      background: var(--off-white);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      padding: 4px 10px;
+      border-radius: 3px;
+    }
+    .solution-card.featured .solution-tag {
+      background: rgba(195,164,76,0.15);
+      border-color: rgba(195,164,76,0.3);
+      color: var(--gold-light);
+    }
+
+    .solution-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--crimson);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: gap 0.2s;
+    }
+    .solution-card.featured .solution-link { color: var(--gold-light); }
+    .solution-link:hover { gap: 10px; }
+
+    /* ─── INDUSTRIES ─────────────────────────────────────── */
+    .industries { background: var(--off-white); padding-top: 28px; }
+    .industries-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .industry-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px 28px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .industry-card:hover {
+      border-color: var(--crimson);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(137,42,61,0.1);
+    }
+    .industry-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 20px;
+      color: var(--crimson);
+    }
+    .industry-card h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .industry-card p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--mid-gray);
+    }
+
+    /* ─── DATA INTELLIGENCE ──────────────────────────────── */
+    .data-intelligence {
+      background: var(--ink);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .data-intelligence::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(137,42,61,0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .data-content .section-title { color: var(--white); }
+    .data-content .section-lead { color: rgba(255,255,255,0.6); }
+
+    .data-features {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .data-feature {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .data-feature-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--gold);
+    }
+    .data-feature-text h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .data-feature-text p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .data-visual {
+      position: relative;
+    }
+    .data-chart-container {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 36px;
+    }
+    .data-chart-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 24px;
+    }
+    .data-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .data-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .data-bar-region {
+      width: 80px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      flex-shrink: 0;
+    }
+    .data-bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .data-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--crimson), var(--crimson-light));
+      transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .data-bar-fill.gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .data-bar-val {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      width: 36px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ─── TESTIMONIAL ────────────────────────────────────── */
+    .testimonial { background: var(--crimson); }
+    .testimonial-inner {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .testimonial blockquote {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1.5;
+      color: var(--white);
+      margin-bottom: 32px;
+    }
+    .testimonial blockquote::before {
+      content: '\201C';
+      font-size: 1.4em;
+      color: rgba(255,255,255,0.3);
+      display: block;
+      line-height: 0.8;
+      margin-bottom: 8px;
+    }
+    .testimonial-author {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+    }
+    .testimonial-author span {
+      display: block;
+      color: rgba(255,255,255,0.4);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      margin-top: 4px;
+    }
+
+    /* ─── INSIGHTS ───────────────────────────────────────── */
+    .insights { background: var(--white); }
+    .insights-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .insight-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .insight-card:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+    }
+    .insight-card-top {
+      background: var(--ink);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      min-height: 140px;
+      display: flex;
+      align-items: flex-end;
+    }
+    .insight-card-top::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px;
+      height: 160px;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+    .insight-card-top::after {
+      content: '';
+      position: absolute;
+      top: -10px; right: -10px;
+      width: 100px;
+      height: 100px;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .insight-type {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(195,164,76,0.2);
+      color: var(--gold-light);
+      padding: 4px 10px;
+      border-radius: 3px;
+      border: 1px solid rgba(195,164,76,0.25);
+      position: relative;
+      z-index: 1;
+    }
+    .insight-body { padding: 28px 32px; }
+    .insight-body h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .insight-body p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--slate);
+      margin-bottom: 20px;
+    }
+    .insight-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--mid-gray);
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .insight-link {
+      color: var(--crimson);
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .insight-link:hover { text-decoration: underline; }
+
+    /* ─── CTA ────────────────────────────────────────────── */
+    /* ─── GLOBAL REACH ─── */
+    .global-reach {
+      background: var(--ink);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      position: relative;
+    }
+    .global-reach::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 80% at 80% 50%, rgba(137,42,61,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 10% 20%, rgba(195,164,76,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .global-reach-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .global-reach-globe {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #psr-globe {
+      width: 520px;
+      height: 520px;
+      max-width: 100%;
+      cursor: grab;
+    }
+    #psr-globe:active { cursor: grabbing; }
+
+    @media (max-width: 1024px) {
+      .global-reach-inner { grid-template-columns: 1fr; }
+      #psr-globe { width: 400px; height: 400px; }
+    }
+    @media (max-width: 768px) {
+      .global-reach-inner { padding: 60px 24px; }
+      #psr-globe { width: 300px; height: 300px; }
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      background: var(--ink);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(137,42,61,0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .cta-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+    .cta-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: clamp(28px, 3.5vw, 44px);
+      letter-spacing: -0.03em;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .cta-title strong { font-weight: 700; }
+    .cta-sub {
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 36px;
+    }
+    .cta-trust {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .cta-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+    }
+    .cta-trust-item svg { color: var(--gold); flex-shrink: 0; }
+
+    /* ─── DEMO FORM ─── */
+    .demo-form-wrap {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 44px 40px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    }
+    .demo-form-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--slate);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-family: 'Inter', sans-serif;
+      font-size: 14.5px;
+      color: var(--ink);
+      background: var(--off-white);
+      border: 1.5px solid var(--border);
+      border-radius: 5px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+      line-height: 1.6;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--crimson);
+      box-shadow: 0 0 0 3px rgba(137,42,61,0.1);
+      background: var(--white);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--mid-gray); }
+
+    /* Interest radio circles */
+    .interest-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .interest-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 4px;
+    }
+    .interest-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      background: var(--off-white);
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .interest-option:hover { border-color: var(--crimson); background: var(--white); }
+    .interest-option input[type="radio"] { display: none; }
+    .interest-option input[type="radio"]:checked + .radio-circle { border-color: var(--crimson); }
+    .interest-option input[type="radio"]:checked + .radio-circle::after { opacity: 1; transform: scale(1); }
+    .interest-option:has(input:checked) { border-color: var(--crimson); background: rgba(137,42,61,0.04); }
+    .radio-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .radio-circle::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--crimson);
+      opacity: 0;
+      transition: opacity 0.15s, transform 0.15s cubic-bezier(0.16,1,0.3,1);
+    }
+    .interest-option-text {
+      font-size: 14px;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* GDPR checkbox */
+    .gdpr-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .gdpr-group input[type="checkbox"] { display: none; }
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      position: relative;
+      transition: border-color 0.2s, background 0.2s;
+      background: var(--off-white);
+    }
+    .gdpr-group input:checked + .custom-checkbox {
+      background: var(--crimson);
+      border-color: var(--crimson);
+    }
+    .gdpr-group input:checked + .custom-checkbox::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 5px;
+      width: 5px; height: 9px;
+      border: 2px solid white;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+    .gdpr-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--slate);
+    }
+    .gdpr-text a { color: var(--crimson); text-decoration: none; }
+    .gdpr-text a:hover { text-decoration: underline; }
+
+    .btn-form-submit {
+      width: 100%;
+      background: var(--crimson);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 15px 28px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-form-submit:hover { background: var(--crimson-dark); transform: translateY(-1px); }
+    .btn-form-submit:active { transform: scale(0.99); }
+
+    .cta-actions {
+      display: flex;
+      gap: 14px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .btn-primary-dark {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ink);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-primary-dark:hover { background: var(--slate-dark); }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--crimson);
+      border: 1.5px solid var(--crimson);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 13px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { background: var(--crimson); color: var(--white); }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      color: var(--white);
+      padding: 56px 0 0;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      padding-bottom: 44px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer-brand img { height: 44px; margin-bottom: 16px; }
+    .footer-brand p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.45);
+      max-width: 280px;
+      margin-bottom: 24px;
+    }
+    .footer-brand .tagline {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--crimson);
+    }
+    .footer-col h5 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 20px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-col ul a {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--white); }
+    .footer-bottom {
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-bottom p {
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.35);
+    }
+    .footer-bottom-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-bottom-links a {
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-bottom-links a:hover { color: rgba(255,255,255,0.7); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .hero-chart-wrapper { width: 360px; height: 360px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .data-grid { grid-template-columns: 1fr; }
+      .solutions-grid { grid-template-columns: 1fr; }
+      .industries-grid { grid-template-columns: repeat(2, 1fr); }
+      .insights-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .cta-inner { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.15); }
+    }
+
+    /* ─── HAMBURGER ─── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 44px;
+      height: 44px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .nav-hamburger:hover { background: rgba(137,42,61,0.06); }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.2s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 72px;
+      left: 0; right: 0;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      z-index: 99;
+      overflow-y: auto;
+      max-height: calc(100vh - 72px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    .mobile-nav.open { display: block; }
+    .mobile-nav-section { border-bottom: 1px solid var(--border); }
+    .mobile-nav-heading {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      padding: 16px 24px 8px;
+    }
+    .mobile-nav a {
+      display: block;
+      padding: 13px 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      text-decoration: none;
+      border-top: 1px solid var(--border);
+      transition: background 0.15s, color 0.15s;
+    }
+    .mobile-nav a:first-of-type { border-top: none; }
+    .mobile-nav a:hover { background: var(--off-white); color: var(--crimson); }
+    .mobile-nav-cta {
+      padding: 16px 24px;
+    }
+    .mobile-nav-cta a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--crimson);
+      color: var(--white) !important;
+      padding: 14px 24px;
+      border-radius: 4px;
+      font-weight: 600 !important;
+      font-size: 15px !important;
+      text-decoration: none;
+      border-top: none !important;
+      transition: background 0.2s !important;
+    }
+    .mobile-nav-cta a:hover { background: var(--crimson-dark) !important; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-inner { padding: 0 24px; }
+      .container { padding: 0 24px; }
+      section { padding: 60px 0; }
+      .hero-inner { padding: 72px 24px 48px; }
+      .hero-chart-wrapper { width: 100%; max-width: 300px; height: 300px; margin-left: auto; margin-right: auto; }
+      .about-pillars { grid-template-columns: 1fr; }
+      .about-image-block { padding: 28px; }
+      .industries-grid { grid-template-columns: 1fr 1fr; }
+      .insights-grid { grid-template-columns: 1fr; }
+      .insight-body { padding: 20px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+      .stats-bar-inner { grid-template-columns: repeat(2, 1fr); padding: 0 24px; }
+      .stat-item:nth-child(4) { border-top: 1px solid rgba(255,255,255,0.15); }
+      .hero-stat-card { display: none; }
+      .demo-form-wrap { padding: 28px 20px; }
+      .hero-trust p { font-size: 12px; }
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-up-delay-1 { transition-delay: 0.1s; }
+    .fade-up-delay-2 { transition-delay: 0.2s; }
+    .fade-up-delay-3 { transition-delay: 0.3s; }
+    .fade-up-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── CLIENT LOGOS ───────────────────────────────────── */
+    .clients-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .clients-bar-label {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      margin-bottom: 12px;
+    }
+    .clients-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      padding: 0 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .client-wordmark {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11.5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #CCCAC4;
+      transition: color 0.25s cubic-bezier(0.16,1,0.3,1);
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: default;
+      user-select: none;
+    }
+    .client-wordmark:hover { color: var(--slate); }
+
+    /* ─── TESTIMONIAL ────────────────────────────────────── */
+    .testimonial-section {
+      background: var(--off-white);
+      padding: 80px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .testimonial-bg-deco {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 5% 50%, rgba(137,42,61,0.05) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 60% at 95% 50%, rgba(195,164,76,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .testimonial-inner {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 40px;
+      text-align: center;
+      position: relative;
+    }
+    .testimonial-open-quote {
+      display: block;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 120px;
+      line-height: 0.55;
+      color: var(--crimson);
+      opacity: 0.16;
+      margin-bottom: 20px;
+      pointer-events: none;
+    }
+    .testimonial-text {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: clamp(20px, 2.8vw, 30px);
+      line-height: 1.55;
+      color: var(--ink);
+      margin-bottom: 40px;
+      letter-spacing: 0.005em;
+    }
+    .testimonial-text strong {
+      font-style: normal;
+      color: var(--crimson);
+      font-weight: 600;
+    }
+    .testimonial-rule {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      margin: 0 auto 28px;
+      border-radius: 2px;
+    }
+    .testimonial-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+    .testimonial-role {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--mid-gray);
+      margin-top: 5px;
+    }
+
+    /* ─── ENHANCED HOVERS ────────────────────────────────── */
+    .industry-card:hover {
+      border-color: var(--crimson) !important;
+      transform: translateY(-4px) !important;
+      box-shadow: 0 4px 16px rgba(137,42,61,0.14), 0 12px 40px rgba(137,42,61,0.08), 0 1px 4px rgba(0,0,0,0.06) !important;
+      background: #FDFBFB !important;
+    }
+    .industry-card { transition: border-color 0.25s cubic-bezier(0.16,1,0.3,1), transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s cubic-bezier(0.16,1,0.3,1), background 0.25s !important; }
+    .insight-card:hover {
+      box-shadow: 0 4px 16px rgba(137,42,61,0.12), 0 16px 48px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06) !important;
+      transform: translateY(-4px) !important;
+      border-color: rgba(137,42,61,0.22) !important;
+    }
+    .insight-card { transition: box-shadow 0.25s cubic-bezier(0.16,1,0.3,1), transform 0.25s cubic-bezier(0.16,1,0.3,1), border-color 0.25s !important; }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAVIGATION ─── -->
+  <nav id="main-nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <img src="PSR_Logo.jpeg" alt="PSR Logo" />
+        <div class="nav-logo-text">
+          <span class="name">Power Systems Research</span>
+          <span class="tag">Powerful Possibilities™</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li class="has-dropdown">
+          <a href="agricultural.html">Industries</a>
+          <div class="dropdown">
+            <div class="dropdown-label">Industries We Track</div>
+            <a href="agricultural.html">Agricultural</a>
+            <a href="construction.html">Construction</a>
+            <a href="industrial.html">Industrial</a>
+            <a href="lawn-and-garden.html">Lawn and Garden</a>
+            <a href="commercial-vehicles.html">Commercial Vehicles</a>
+            <a href="marine.html">Marine</a>
+            <a href="passenger-cars.html">Passenger Cars, Minivans, and SUVs</a>
+            <a href="power-generation.html">Power Generation</a>
+            <a href="railway.html">Railway</a>
+            <a href="recreational-products.html">Recreational Products</a>
+          </div>
+        </li>
+        <li class="has-dropdown">
+          <a href="solutions.html">Products</a>
+          <div class="dropdown">
+            <div class="dropdown-label">Data &amp; Forecasts</div>
+            <a href="enginlink.html">EnginLink™</a>
+            <a href="oe-link.html">OE Link™</a>
+            <a href="cv-link.html">CV Link™</a>
+            <a href="partslink.html">PartsLink™</a>
+            <a href="marinelink.html">MarineLink™</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-label">Solutions</div>
+            <a href="custom-market-studies.html">Custom Market Studies</a>
+            <a href="powertracker.html">PowerTracker™ North America</a>
+            <a href="custom-surveys.html">Custom Surveys</a>
+            <a href="downloadable-resources.html">Downloadable Resources</a>
+          </div>
+        </li>
+        <li class="has-dropdown">
+          <a href="powertalk-news.html">Reports</a>
+          <div class="dropdown">
+            <div class="dropdown-label">PSR Reports</div>
+            <a href="powertalk-news.html">PowerTALK News</a>
+            <a href="truck-production-index.html">Truck Production Index (TPI)</a>
+            <a href="alternative-power.html">Alternative Power Reports</a>
+            <a href="show-reports.html">Show Reports</a>
+            <a href="datapoint-reports.html">Datapoint Reports</a>
+          </div>
+        </li>
+        <li><a href="news.html">News</a></li>
+        <li class="has-dropdown">
+          <a href="history.html">About</a>
+          <div class="dropdown">
+            <div class="dropdown-label">About PSR</div>
+            <a href="history.html">History</a>
+            <a href="our-team.html">Our Team</a>
+            <a href="why-psr.html">Why PSR?</a>
+            <a href="call-center.html">In-house Call Center</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-label">Our Offices</div>
+            <a href="office-us.html">United States</a>
+            <a href="office-brazil.html">Brazil</a>
+            <a href="office-china.html">China</a>
+            <a href="office-europe.html">Europe</a>
+            <a href="office-india.html">India</a>
+            <a href="office-japan.html">Japan</a>
+            <a href="office-russia.html">Russia</a>
+          </div>
+        </li>
+        <li><a href="#contact" class="nav-cta">Request a Quote</a></li>
+      </ul>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ─── MOBILE NAV ─── -->
+  <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+    <div class="mobile-nav-section">
+      <div class="mobile-nav-heading">Industries</div>
+      <a href="agricultural.html">Agricultural</a>
+      <a href="construction.html">Construction</a>
+      <a href="industrial.html">Industrial</a>
+      <a href="lawn-and-garden.html">Lawn and Garden</a>
+      <a href="commercial-vehicles.html">Commercial Vehicles</a>
+      <a href="marine.html">Marine</a>
+      <a href="passenger-cars.html">Passenger Cars, Minivans &amp; SUVs</a>
+      <a href="power-generation.html">Power Generation</a>
+      <a href="railway.html">Railway</a>
+      <a href="recreational-products.html">Recreational Products</a>
+    </div>
+    <div class="mobile-nav-section">
+      <div class="mobile-nav-heading">Products</div>
+      <a href="enginlink.html">EnginLink™</a>
+      <a href="oe-link.html">OE Link™</a>
+      <a href="cv-link.html">CV Link™</a>
+      <a href="partslink.html">PartsLink™</a>
+      <a href="marinelink.html">MarineLink™</a>
+      <a href="custom-market-studies.html">Custom Market Studies</a>
+      <a href="powertracker.html">PowerTracker™ North America</a>
+      <a href="custom-surveys.html">Custom Surveys</a>
+      <a href="downloadable-resources.html">Downloadable Resources</a>
+    </div>
+    <div class="mobile-nav-section">
+      <div class="mobile-nav-heading">Reports</div>
+      <a href="powertalk-news.html">PowerTALK News</a>
+      <a href="truck-production-index.html">Truck Production Index (TPI)</a>
+      <a href="alternative-power.html">Alternative Power Reports</a>
+      <a href="show-reports.html">Show Reports</a>
+      <a href="datapoint-reports.html">Datapoint Reports</a>
+    </div>
+    <div class="mobile-nav-section">
+      <div class="mobile-nav-heading">About</div>
+      <a href="news.html">News</a>
+      <a href="history.html">History</a>
+      <a href="our-team.html">Our Team</a>
+      <a href="why-psr.html">Why PSR?</a>
+      <a href="call-center.html">In-house Call Center</a>
+    </div>
+    <div class="mobile-nav-cta">
+      <a href="#contact">Request a Quote</a>
+    </div>
+  </div>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-eyebrow">Powertrain Intelligence — Since 1976</div>
+        <h1>
+          The Global<br />
+          <strong>Standard.</strong>
+        </h1>
+        <p class="hero-sub-italic">Powerful Possibilities™</p>
+        <p>PSR analysts collect and analyze global engine and powertrain data to develop targeted forecasts by industry segment and region — delivering the market intelligence that OEMs, dealers, and fleet managers rely on.</p>
+        <div class="hero-actions">
+          <a href="solutions.html" class="btn-primary">
+            Explore Our Solutions
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#data" class="btn-outline">View Data Coverage</a>
+        </div>
+        <div class="hero-trust">
+          <div class="hero-trust-line"></div>
+          <p><strong>Trusted by 500+ organizations worldwide</strong>OEMs · Engine Manufacturers · Dealers · Fleet Managers</p>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-chart-wrapper">
+          <canvas id="psr-globe"></canvas>
+          <!-- Floating stat cards -->
+          <div class="hero-stat-card card-1">
+            <div class="stat-num">180<span>+</span></div>
+            <div class="stat-label">Countries Covered</div>
+          </div>
+          <div class="hero-stat-card card-2">
+            <div class="stat-num">40M<span>+</span></div>
+            <div class="stat-label">Units Tracked Annually</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STATS BAR ─── -->
+  <div class="stats-bar">
+    <div class="stats-bar-inner">
+      <div class="stat-item">
+        <div class="num">50<sup>+</sup></div>
+        <div class="label">Years of Expertise</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">180<sup>+</sup></div>
+        <div class="label">Countries Monitored</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">40M<sup>+</sup></div>
+        <div class="label">Units Tracked Annually</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">500<sup>+</sup></div>
+        <div class="label">Global Clients</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CLIENT LOGOS ─── -->
+  <div class="clients-bar">
+    <div class="clients-bar-label">Trusted by global leaders across the powertrain ecosystem</div>
+    <div class="clients-track">
+      <span class="client-wordmark">Cummins</span>
+      <span class="client-wordmark">Caterpillar</span>
+      <span class="client-wordmark">John Deere</span>
+      <span class="client-wordmark">Volvo Group</span>
+      <span class="client-wordmark">Kubota</span>
+      <span class="client-wordmark">Yanmar</span>
+      <span class="client-wordmark">AGCO</span>
+      <span class="client-wordmark">Perkins</span>
+    </div>
+  </div>
+
+  <!-- ─── ABOUT ─── -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="fade-up">
+          <div class="section-eyebrow">Who We Are</div>
+          <h2 class="section-title">More than data.<br /><strong>Market intelligence.</strong></h2>
+          <blockquote class="about-quote">
+            The industry standard in powertrain intelligence — built for clarity, authority, and scale.
+          </blockquote>
+          <p class="about-body">PSR analysts work with OEMs, engine manufacturers, dealers and fleet managers to compile detailed data on global engine and powertrain markets. Our forecasts by industry segment and region have become the reference point decision-makers trust.</p>
+          <p class="about-body">We deliver precision — not noise. Our team combines deep domain expertise with proprietary methodologies refined over generations of market coverage.</p>
+          <div class="about-since">Industry Standard Since 1976</div>
+        </div>
+        <div class="fade-up fade-up-delay-2">
+          <div class="about-image-block">
+            <svg viewBox="0 0 400 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- World map dots abstraction -->
+              <g opacity="0.15">
+                <rect x="40" y="60" width="4" height="4" rx="1" fill="white"/>
+                <rect x="52" y="56" width="4" height="4" rx="1" fill="white"/>
+                <rect x="64" y="60" width="4" height="4" rx="1" fill="white"/>
+                <rect x="76" y="64" width="4" height="4" rx="1" fill="white"/>
+                <rect x="88" y="60" width="4" height="4" rx="1" fill="white"/>
+                <rect x="100" y="56" width="4" height="4" rx="1" fill="white"/>
+                <rect x="112" y="52" width="4" height="4" rx="1" fill="white"/>
+                <rect x="124" y="56" width="4" height="4" rx="1" fill="white"/>
+                <rect x="160" y="52" width="4" height="4" rx="1" fill="white"/>
+                <rect x="172" y="48" width="4" height="4" rx="1" fill="white"/>
+                <rect x="184" y="44" width="4" height="4" rx="1" fill="white"/>
+                <rect x="196" y="48" width="4" height="4" rx="1" fill="white"/>
+                <rect x="208" y="52" width="4" height="4" rx="1" fill="white"/>
+                <rect x="240" y="56" width="4" height="4" rx="1" fill="white"/>
+                <rect x="252" y="52" width="4" height="4" rx="1" fill="white"/>
+                <rect x="264" y="48" width="4" height="4" rx="1" fill="white"/>
+                <rect x="276" y="52" width="4" height="4" rx="1" fill="white"/>
+                <rect x="288" y="56" width="4" height="4" rx="1" fill="white"/>
+                <rect x="300" y="60" width="4" height="4" rx="1" fill="white"/>
+                <rect x="312" y="56" width="4" height="4" rx="1" fill="white"/>
+              </g>
+              <!-- Trend line -->
+              <polyline points="40,200 80,185 120,170 160,155 200,135 240,118 280,100 320,88 360,72" stroke="#892A3D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="40,200 80,195 120,188 160,178 200,165 240,155 280,142 320,135 360,125" stroke="#C3A44C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4" opacity="0.6"/>
+              <!-- Data points -->
+              <circle cx="200" cy="135" r="5" fill="#892A3D"/>
+              <circle cx="200" cy="135" r="10" fill="#892A3D" opacity="0.2"/>
+              <circle cx="320" cy="88" r="5" fill="#892A3D"/>
+              <circle cx="360" cy="72" r="5" fill="#892A3D"/>
+              <!-- Axis -->
+              <line x1="36" y1="50" x2="36" y2="210" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <line x1="36" y1="210" x2="370" y2="210" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <!-- Legend -->
+              <rect x="40" y="228" width="16" height="3" rx="1.5" fill="#892A3D"/>
+              <text x="62" y="233" font-family="Inter, sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">Global Powertrain Units</text>
+              <rect x="180" y="228" width="16" height="3" rx="1.5" fill="#C3A44C"/>
+              <text x="202" y="233" font-family="Inter, sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">Market Forecast</text>
+            </svg>
+          </div>
+          <div class="about-pillars">
+            <div class="pillar">
+              <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              <h4>Global Coverage</h4>
+              <p>Data spanning 180+ countries and all major powertrain segments.</p>
+            </div>
+            <div class="pillar">
+              <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <h4>Actionable Forecasts</h4>
+              <p>Segment-level projections built for strategic planning and procurement.</p>
+            </div>
+            <div class="pillar">
+              <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              <h4>Industry Standard</h4>
+              <p>The reference data trusted by the world's leading manufacturers.</p>
+            </div>
+            <div class="pillar">
+              <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+              <h4>Expert Analysts</h4>
+              <p>A global team with deep domain expertise in powertrain markets.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INDUSTRIES ─── -->
+  <section class="industries" id="industries">
+    <div class="container">
+      <div class="section-eyebrow fade-up">Industries We Serve</div>
+      <h2 class="section-title fade-up fade-up-delay-1">Built for the full<br /><strong>powertrain ecosystem.</strong></h2>
+      <p class="section-lead fade-up fade-up-delay-2">From OEMs to fleet operators, PSR's intelligence serves every participant in the global power systems value chain.</p>
+      <div class="industries-grid">
+        <div class="industry-card fade-up">
+          <svg class="industry-icon" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 36V22l18-10 18 10v14M20 36v-8h12v8"/>
+            <path d="M26 12v24"/>
+          </svg>
+          <h4>OEMs & Manufacturers</h4>
+          <p>Production planning, competitive benchmarking, and market share analysis.</p>
+        </div>
+        <div class="industry-card fade-up fade-up-delay-1">
+          <svg class="industry-icon" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="20" width="40" height="22" rx="3"/>
+            <path d="M14 20v-4a12 12 0 0124 0v4"/>
+            <circle cx="18" cy="31" r="3"/>
+            <circle cx="34" cy="31" r="3"/>
+          </svg>
+          <h4>Engine Manufacturers</h4>
+          <p>Demand forecasting and aftermarket opportunity sizing by application.</p>
+        </div>
+        <div class="industry-card fade-up fade-up-delay-2">
+          <svg class="industry-icon" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 42V22l16-12 16 12v20H10z"/>
+            <path d="M20 42V32h12v10M10 22h32"/>
+          </svg>
+          <h4>Dealers & Distributors</h4>
+          <p>Regional market sizing and inventory planning intelligence.</p>
+        </div>
+        <div class="industry-card fade-up fade-up-delay-3">
+          <svg class="industry-icon" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="22" width="16" height="12" rx="2"/>
+            <rect x="32" y="22" width="16" height="12" rx="2"/>
+            <path d="M20 28h12M8 34v4M44 34v4M10 38h8M34 38h8"/>
+            <circle cx="14" cy="40" r="2"/>
+            <circle cx="38" cy="40" r="2"/>
+          </svg>
+          <h4>Fleet Managers</h4>
+          <p>Total cost of ownership analysis and replacement cycle planning data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DATA INTELLIGENCE ─── -->
+  <section class="data-intelligence" id="data">
+    <div class="container">
+      <div class="data-grid">
+        <div class="data-content fade-up">
+          <div class="section-eyebrow" style="color: var(--gold);">
+            <span style="background: var(--gold);"></span>
+            Data & Intelligence
+          </div>
+          <h2 class="section-title">Where precision<br /><strong>meets scale.</strong></h2>
+          <p class="section-lead">Our proprietary data collection methodology spans direct OEM relationships, government registrations, trade data, and field surveys — synthesized into the most reliable powertrain market intelligence available.</p>
+          <div class="data-features">
+            <div class="data-feature">
+              <div class="data-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+              </div>
+              <div class="data-feature-text">
+                <h4>Segment-Level Granularity</h4>
+                <p>Data broken down by horsepower band, application, fuel type, and emissions tier across every major market.</p>
+              </div>
+            </div>
+            <div class="data-feature">
+              <div class="data-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              </div>
+              <div class="data-feature-text">
+                <h4>180+ Country Coverage</h4>
+                <p>From established Western markets to emerging Asia-Pacific and Latin American regions — complete global visibility.</p>
+              </div>
+            </div>
+            <div class="data-feature">
+              <div class="data-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12l10-10 10 10"/></svg>
+              </div>
+              <div class="data-feature-text">
+                <h4>Quarterly Refresh Cycle</h4>
+                <p>Data updated every quarter with the latest production, shipment, and registration figures from primary sources.</p>
+              </div>
+            </div>
+            <div class="data-feature">
+              <div class="data-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="data-feature-text">
+                <h4>Validated & Verified</h4>
+                <p>Multi-source cross-validation and analyst review ensure every data point meets PSR's quality standard before publication.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="data-visual fade-up fade-up-delay-2">
+          <div class="data-chart-container">
+            <div class="data-chart-label">Engine Unit Volume by Region — 2025 Forecast</div>
+            <div class="data-bars">
+              <div class="data-bar-row">
+                <div class="data-bar-region">Asia Pacific</div>
+                <div class="data-bar-track"><div class="data-bar-fill" data-width="88%" style="width: 0%"></div></div>
+                <div class="data-bar-val">88%</div>
+              </div>
+              <div class="data-bar-row">
+                <div class="data-bar-region">North America</div>
+                <div class="data-bar-track"><div class="data-bar-fill" data-width="72%" style="width: 0%"></div></div>
+                <div class="data-bar-val">72%</div>
+              </div>
+              <div class="data-bar-row">
+                <div class="data-bar-region">Europe</div>
+                <div class="data-bar-track"><div class="data-bar-fill" data-width="64%" style="width: 0%"></div></div>
+                <div class="data-bar-val">64%</div>
+              </div>
+              <div class="data-bar-row">
+                <div class="data-bar-region">Latin America</div>
+                <div class="data-bar-track"><div class="data-bar-fill gold" data-width="48%" style="width: 0%"></div></div>
+                <div class="data-bar-val">48%</div>
+              </div>
+              <div class="data-bar-row">
+                <div class="data-bar-region">Middle East</div>
+                <div class="data-bar-track"><div class="data-bar-fill gold" data-width="34%" style="width: 0%"></div></div>
+                <div class="data-bar-val">34%</div>
+              </div>
+              <div class="data-bar-row">
+                <div class="data-bar-region">Africa</div>
+                <div class="data-bar-track"><div class="data-bar-fill gold" data-width="22%" style="width: 0%"></div></div>
+                <div class="data-bar-val">22%</div>
+              </div>
+            </div>
+            <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; gap: 20px;">
+              <div style="font-size: 11px; color: rgba(255,255,255,0.35);">
+                <span style="display: inline-block; width: 12px; height: 3px; background: #892A3D; border-radius: 2px; vertical-align: middle; margin-right: 6px;"></span>
+                High Growth Markets
+              </div>
+              <div style="font-size: 11px; color: rgba(255,255,255,0.35);">
+                <span style="display: inline-block; width: 12px; height: 3px; background: #C3A44C; border-radius: 2px; vertical-align: middle; margin-right: 6px;"></span>
+                Emerging Markets
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <!-- ─── INSIGHTS ─── -->
+  <section class="insights" id="insights">
+    <div class="container">
+      <div class="insights-header">
+        <div>
+          <div class="section-eyebrow fade-up">Insights & Research</div>
+          <h2 class="section-title fade-up fade-up-delay-1">Intelligence worth<br /><strong>reading.</strong></h2>
+        </div>
+        <a href="#contact" class="btn-ghost fade-up fade-up-delay-2" style="color: var(--crimson); border-color: var(--crimson);">View All Insights</a>
+      </div>
+      <div class="insights-grid">
+        <div class="insight-card fade-up">
+          <div class="insight-card-top" style="background: #1A1A24;">
+            <svg viewBox="0 0 280 140" fill="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.4;" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#892A3D" stop-opacity="0.5"/>
+                  <stop offset="100%" stop-color="#892A3D" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="35" x2="280" y2="35" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="0" y1="70" x2="280" y2="70" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="0" y1="105" x2="280" y2="105" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <polygon points="0,120 40,105 90,90 140,72 190,50 240,32 280,18 280,140 0,140" fill="url(#lg1)"/>
+              <polyline points="0,120 40,105 90,90 140,72 190,50 240,32 280,18" stroke="#892A3D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="0,130 40,125 90,118 140,112 190,100 240,90 280,82" stroke="#C3A44C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4" opacity="0.6"/>
+              <circle cx="280" cy="18" r="4" fill="#892A3D"/>
+              <circle cx="280" cy="18" r="8" fill="#892A3D" opacity="0.2"/>
+            </svg>
+            <span class="insight-type">Market Report</span>
+          </div>
+          <div class="insight-body">
+            <h4>Global Diesel Engine Outlook 2025–2030</h4>
+            <p>An in-depth analysis of diesel powertrain demand across agriculture, construction, and industrial segments as electrification pressures evolve by region.</p>
+            <div class="insight-meta">
+              <span>Q1 2025</span>
+              <a href="#contact" class="insight-link">Read report →</a>
+            </div>
+          </div>
+        </div>
+        <div class="insight-card fade-up fade-up-delay-1">
+          <div class="insight-card-top" style="background: #2A1A1E;">
+            <svg viewBox="0 0 280 140" fill="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.45;" preserveAspectRatio="none">
+              <line x1="0" y1="139" x2="280" y2="139" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="0" y1="35" x2="280" y2="35" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4 4"/>
+              <line x1="0" y1="70" x2="280" y2="70" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4 4"/>
+              <line x1="0" y1="105" x2="280" y2="105" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4 4"/>
+              <rect x="14" y="95" width="26" height="44" fill="#892A3D" rx="2" opacity="0.7"/>
+              <rect x="50" y="72" width="26" height="67" fill="#892A3D" rx="2" opacity="0.7"/>
+              <rect x="86" y="48" width="26" height="91" fill="#892A3D" rx="2"/>
+              <rect x="122" y="22" width="26" height="117" fill="#C3A44C" rx="2"/>
+              <rect x="158" y="55" width="26" height="84" fill="#892A3D" rx="2" opacity="0.8"/>
+              <rect x="194" y="80" width="26" height="59" fill="#892A3D" rx="2" opacity="0.65"/>
+              <rect x="230" y="100" width="26" height="39" fill="#892A3D" rx="2" opacity="0.5"/>
+            </svg>
+            <span class="insight-type">Special Analysis</span>
+          </div>
+          <div class="insight-body">
+            <h4>Electrification Adoption Rates by Powertrain Segment</h4>
+            <p>Tracking the pace and pattern of electric powertrain adoption across construction, agriculture, on-highway, and stationary power applications globally.</p>
+            <div class="insight-meta">
+              <span>March 2025</span>
+              <a href="#contact" class="insight-link">Read analysis →</a>
+            </div>
+          </div>
+        </div>
+        <div class="insight-card fade-up fade-up-delay-2">
+          <div class="insight-card-top" style="background: #1A1E2A;">
+            <svg viewBox="0 0 280 140" fill="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.4;" preserveAspectRatio="xMidYMid slice">
+              <g opacity="0.12" fill="white">
+                <circle cx="20" cy="20" r="1.5"/><circle cx="46" cy="20" r="1.5"/><circle cx="72" cy="20" r="1.5"/><circle cx="98" cy="20" r="1.5"/>
+                <circle cx="20" cy="46" r="1.5"/><circle cx="46" cy="46" r="1.5"/><circle cx="72" cy="46" r="1.5"/><circle cx="98" cy="46" r="1.5"/>
+                <circle cx="20" cy="72" r="1.5"/><circle cx="46" cy="72" r="1.5"/><circle cx="72" cy="72" r="1.5"/><circle cx="98" cy="72" r="1.5"/>
+                <circle cx="20" cy="98" r="1.5"/><circle cx="46" cy="98" r="1.5"/><circle cx="72" cy="98" r="1.5"/><circle cx="98" cy="98" r="1.5"/>
+              </g>
+              <circle cx="210" cy="55" r="38" fill="#892A3D" opacity="0.18"/>
+              <circle cx="210" cy="55" r="24" fill="#892A3D" opacity="0.25"/>
+              <circle cx="210" cy="55" r="10" fill="#892A3D" opacity="0.7"/>
+              <circle cx="210" cy="55" r="4" fill="#C3A44C"/>
+              <circle cx="155" cy="35" r="12" fill="#892A3D" opacity="0.2"/>
+              <circle cx="155" cy="35" r="5" fill="#892A3D" opacity="0.5"/>
+              <circle cx="185" cy="90" r="10" fill="#892A3D" opacity="0.2"/>
+              <circle cx="185" cy="90" r="4" fill="#892A3D" opacity="0.5"/>
+              <line x1="155" y1="35" x2="210" y2="55" stroke="#C3A44C" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/>
+              <line x1="185" y1="90" x2="210" y2="55" stroke="#C3A44C" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/>
+            </svg>
+            <span class="insight-type">Regional Brief</span>
+          </div>
+          <div class="insight-body">
+            <h4>Asia Pacific Powertrain Market: Key Trends for 2025</h4>
+            <p>China, India, and Southeast Asia are reshaping global engine volumes. PSR analysts examine the forces driving demand shifts across the region's largest markets.</p>
+            <div class="insight-meta">
+              <span>February 2025</span>
+              <a href="#contact" class="insight-link">Read brief →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TESTIMONIAL ─── -->
+  <section class="testimonial-section">
+    <div class="testimonial-bg-deco"></div>
+    <div class="testimonial-inner fade-up">
+      <span class="testimonial-open-quote">"</span>
+      <p class="testimonial-text">
+        PSR's data has become <strong>the reference point</strong> for our global production planning. No other source gives us the segment-level granularity and regional coverage we need to make confident decisions at scale.
+      </p>
+      <div class="testimonial-rule"></div>
+      <div class="testimonial-name">Director of Market Intelligence</div>
+      <div class="testimonial-role">Global OEM — Agricultural & Construction Equipment</div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="cta-section" id="contact">
+    <div class="container" style="padding-top: 0; padding-bottom: 0;">
+      <div class="cta-inner">
+
+        <!-- Left: copy -->
+        <div class="fade-up">
+          <div class="section-eyebrow" style="color: var(--gold);">
+            <span style="background: var(--gold); display:inline-block; width:20px; height:1.5px; vertical-align:middle; margin-right:8px;"></span>
+            Request a Quote
+          </div>
+          <h2 class="cta-title">Ready to get a quote from<br /><strong>Power Systems Research?</strong></h2>
+          <p class="cta-sub">Fill in the form and one of our analysts will be in touch to walk you through the data coverage most relevant to your needs.</p>
+          <div class="cta-trust">
+            <div class="cta-trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Your data is protected under our privacy policy
+            </div>
+            <div class="cta-trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Typical response within 1 business day
+            </div>
+            <div class="cta-trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+              500+ global organizations served
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: form -->
+        <div class="demo-form-wrap fade-up fade-up-delay-2">
+          <div class="demo-form-title">Tell us about your needs</div>
+          <form onsubmit="handleFormSubmit(event)">
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="first-name">First Name *</label>
+                <input type="text" id="first-name" name="first_name" placeholder="First name" required />
+              </div>
+              <div class="form-group">
+                <label for="last-name">Last Name *</label>
+                <input type="text" id="last-name" name="last_name" placeholder="Last name" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="organization">Organization *</label>
+                <input type="text" id="organization" name="organization" placeholder="Company name" required />
+              </div>
+              <div class="form-group">
+                <label for="job-title">Job Title *</label>
+                <input type="text" id="job-title" name="job_title" placeholder="e.g. Market Intelligence Manager" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="country">Country *</label>
+                <select id="country" name="country" required>
+                  <option value="" disabled selected>Select your country</option>
+                  <option>United States</option>
+                  <option>United Kingdom</option>
+                  <option>Germany</option>
+                  <option>France</option>
+                  <option>Japan</option>
+                  <option>China</option>
+                  <option>India</option>
+                  <option>Brazil</option>
+                  <option>Canada</option>
+                  <option>Australia</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" />
+            </div>
+
+            <!-- Interest radio group -->
+            <div class="interest-group">
+              <div class="interest-label">I'm interested in... *</div>
+              <label class="interest-option">
+                <input type="radio" name="interest" value="on_highway" required />
+                <span class="radio-circle"></span>
+                <span class="interest-option-text">On Highway Applications</span>
+              </label>
+              <label class="interest-option">
+                <input type="radio" name="interest" value="off_highway" />
+                <span class="radio-circle"></span>
+                <span class="interest-option-text">Off Highway Applications</span>
+              </label>
+              <label class="interest-option">
+                <input type="radio" name="interest" value="both" />
+                <span class="radio-circle"></span>
+                <span class="interest-option-text">Both On and Off Highway</span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="details">Details of Your Data Needs</label>
+              <textarea id="details" name="details" placeholder="Tell us about the markets, segments, or regions you're focused on..."></textarea>
+            </div>
+
+            <!-- GDPR -->
+            <label class="gdpr-group">
+              <input type="checkbox" name="gdpr" required />
+              <span class="custom-checkbox"></span>
+              <span class="gdpr-text">I consent to having this website store my submitted information so they can respond to my inquiry. View our <a href="#">Privacy Policy</a>.</span>
+            </label>
+
+            <button type="submit" class="btn-form-submit">
+              Submit Request
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="PSR_Logo.jpeg" alt="PSR Logo" />
+          <p>The global standard in powertrain intelligence — delivering market clarity to OEMs, engine manufacturers, and fleet managers worldwide since 1976.</p>
+          <div class="tagline">Powerful Possibilities™</div>
+        </div>
+        <div class="footer-col">
+          <h5>Solutions</h5>
+          <ul>
+            <li><a href="solutions.html">Market Forecasts</a></li>
+            <li><a href="solutions.html">Engine Database</a></li>
+            <li><a href="solutions.html">Custom Research</a></li>
+            <li><a href="solutions.html">DataLink™ Portal</a></li>
+            <li><a href="solutions.html">Advisory Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Industries</h5>
+          <ul>
+            <li><a href="#industries">OEMs</a></li>
+            <li><a href="#industries">Engine Manufacturers</a></li>
+            <li><a href="#industries">Dealers</a></li>
+            <li><a href="#industries">Fleet Managers</a></li>
+            <li><a href="#industries">Financial Analysts</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="#about">About PSR</a></li>
+            <li><a href="#insights">Insights</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#contact">Request a Quote</a></li>
+            <li><a href="#contact">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Power Systems Research. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Cookie Settings</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // Mobile hamburger
+    const hamburger = document.getElementById('nav-hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+      mobileNav.setAttribute('aria-hidden', !isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    // Close on link tap
+    mobileNav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+        mobileNav.setAttribute('aria-hidden', true);
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Intersection observer for fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Animate data bars when section enters viewport
+    const barObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.data-bar-fill').forEach(bar => {
+            const target = bar.getAttribute('data-width');
+            setTimeout(() => { bar.style.width = target; }, 200);
+          });
+          barObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const dataSection = document.querySelector('.data-intelligence');
+    if (dataSection) barObserver.observe(dataSection);
+
+    // Form submit handler
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.btn-form-submit');
+      btn.textContent = 'Thank you — we\'ll be in touch soon.';
+      btn.style.background = 'var(--slate-dark)';
+      btn.style.cursor = 'default';
+      btn.disabled = true;
+    }
+
+    // ─── PSR GLOBE ───────────────────────────────────────────────
+    (function() {
+      const canvas = document.getElementById('psr-globe');
+      if (!canvas) return;
+
+      const MARKERS = [
+        // North America
+        { lat: 43.65,  lng: -79.38,  label: "Toronto" },
+        { lat: 41.88,  lng: -87.63,  label: "Chicago" },
+        { lat: 29.76,  lng: -95.37,  label: "Houston" },
+        { lat: 45.50,  lng: -73.57,  label: "Montreal" },
+        // Europe
+        { lat: 51.51,  lng: -0.13,   label: "London" },
+        { lat: 52.52,  lng: 13.40,   label: "Berlin" },
+        { lat: 48.86,  lng: 2.35,    label: "Paris" },
+        { lat: 45.46,  lng: 9.19,    label: "Milan" },
+        { lat: 59.33,  lng: 18.07,   label: "Stockholm" },
+        // China & Asia
+        { lat: 39.91,  lng: 116.39,  label: "Beijing" },
+        { lat: 31.23,  lng: 121.47,  label: "Shanghai" },
+        { lat: 22.54,  lng: 114.06,  label: "Shenzhen" },
+        { lat: 35.69,  lng: 139.69,  label: "Tokyo" },
+        { lat: 37.57,  lng: 126.98,  label: "Seoul" },
+        // Rest of world
+        { lat: 19.08,  lng: 72.88,   label: "Mumbai" },
+        { lat: -33.87, lng: 151.21,  label: "Sydney" },
+        { lat: -26.20, lng: 28.04,   label: "Johannesburg" },
+        { lat: -23.55, lng: -46.63,  label: "São Paulo" },
+        { lat: 25.20,  lng: 55.27,   label: "Dubai" },
+      ];
+
+      const CONNECTIONS = [
+        // North America ↔ Europe
+        { from: [43.65, -79.38],  to: [51.51, -0.13] },
+        { from: [41.88, -87.63],  to: [52.52, 13.40] },
+        { from: [41.88, -87.63],  to: [48.86, 2.35] },
+        // Europe ↔ Asia
+        { from: [51.51, -0.13],   to: [39.91, 116.39] },
+        { from: [52.52, 13.40],   to: [19.08, 72.88] },
+        { from: [48.86, 2.35],    to: [25.20, 55.27] },
+        // China internal / Asia
+        { from: [39.91, 116.39],  to: [31.23, 121.47] },
+        { from: [31.23, 121.47],  to: [35.69, 139.69] },
+        { from: [35.69, 139.69],  to: [37.57, 126.98] },
+        // North America ↔ South America
+        { from: [29.76, -95.37],  to: [-23.55, -46.63] },
+        // Asia ↔ Australia
+        { from: [22.54, 114.06],  to: [-33.87, 151.21] },
+        // Europe ↔ Africa
+        { from: [45.46, 9.19],    to: [-26.20, 28.04] },
+        // Middle East hub
+        { from: [25.20, 55.27],   to: [19.08, 72.88] },
+        { from: [25.20, 55.27],   to: [-26.20, 28.04] },
+      ];
+
+      // PSR brand colors
+      const DOT_COLOR    = 'rgba(180, 80, 100, ALPHA)';  // brightened crimson
+      const ARC_COLOR    = 'rgba(195, 164, 76, 0.75)';  // gold arcs more visible
+      const MARKER_COLOR = 'rgba(220, 190, 90, 1)';     // brighter gold markers
+
+      // Build fibonacci sphere dots
+      const DOTS = [];
+      const NUM_DOTS = 1400;
+      const goldenRatio = (1 + Math.sqrt(5)) / 2;
+      for (let i = 0; i < NUM_DOTS; i++) {
+        const theta = (2 * Math.PI * i) / goldenRatio;
+        const phi = Math.acos(1 - (2 * (i + 0.5)) / NUM_DOTS);
+        DOTS.push([
+          Math.cos(theta) * Math.sin(phi),
+          Math.cos(phi),
+          Math.sin(theta) * Math.sin(phi),
+        ]);
+      }
+
+      function latLngToXYZ(lat, lng, r) {
+        const phi   = ((90 - lat) * Math.PI) / 180;
+        const theta = (lng * Math.PI) / 180;
+        return [
+           r * Math.sin(phi) * Math.cos(theta),
+           r * Math.cos(phi),
+           r * Math.sin(phi) * Math.sin(theta),
+        ];
+      }
+
+      function rotateY(x, y, z, a) {
+        const c = Math.cos(a), s = Math.sin(a);
+        return [x * c + z * s, y, -x * s + z * c];
+      }
+
+      function rotateX(x, y, z, a) {
+        const c = Math.cos(a), s = Math.sin(a);
+        return [x, y * c - z * s, y * s + z * c];
+      }
+
+      function project(x, y, z, cx, cy, fov) {
+        const scale = fov / (fov + z);
+        return [x * scale + cx, -y * scale + cy];
+      }
+
+      let rotY = 0.5, rotX = 0.25, time = 0;
+      const AUTO_SPEED = 0.002;
+      let drag = { active: false, startX: 0, startY: 0, startRotY: 0, startRotX: 0 };
+      let animId;
+
+      canvas.addEventListener('pointerdown', e => {
+        drag = { active: true, startX: e.clientX, startY: e.clientY, startRotY: rotY, startRotX: rotX };
+        canvas.setPointerCapture(e.pointerId);
+        canvas.style.cursor = 'grabbing';
+      });
+      canvas.addEventListener('pointermove', e => {
+        if (!drag.active) return;
+        rotY = drag.startRotY + (e.clientX - drag.startX) * 0.005;
+        rotX = Math.max(-1, Math.min(1, drag.startRotX + (e.clientY - drag.startY) * 0.005));
+      });
+      canvas.addEventListener('pointerup', () => { drag.active = false; canvas.style.cursor = 'grab'; });
+
+      function draw() {
+        const dpr = window.devicePixelRatio || 1;
+        const w = canvas.clientWidth;
+        const h = canvas.clientHeight;
+        canvas.width  = w * dpr;
+        canvas.height = h * dpr;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+
+        const cx = w / 2, cy = h / 2;
+        const radius = Math.min(w, h) * 0.40;
+        const fov = 600;
+
+        if (!drag.active) rotY += AUTO_SPEED;
+        time += 0.015;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Subtle outer glow
+        const glow = ctx.createRadialGradient(cx, cy, radius * 0.7, cx, cy, radius * 1.6);
+        glow.addColorStop(0, 'rgba(137,42,61,0.04)');
+        glow.addColorStop(1, 'rgba(137,42,61,0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, w, h);
+
+        // Globe ring
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(137,42,61,0.1)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Dots
+        for (const dot of DOTS) {
+          let [x, y, z] = [dot[0] * radius, dot[1] * radius, dot[2] * radius];
+          [x, y, z] = rotateX(x, y, z, rotX);
+          [x, y, z] = rotateY(x, y, z, rotY);
+          if (z < 0) continue;
+          const [sx, sy] = project(x, y, z, cx, cy, fov);
+          const alpha = Math.max(0.35, (z + radius) / (2 * radius));
+          const dotR  = 1.1 + alpha * 1.0;
+          ctx.beginPath();
+          ctx.arc(sx, sy, dotR, 0, Math.PI * 2);
+          ctx.fillStyle = DOT_COLOR.replace('ALPHA', alpha.toFixed(2));
+          ctx.fill();
+        }
+
+        // Connections / arcs
+        for (const conn of CONNECTIONS) {
+          let [x1, y1, z1] = latLngToXYZ(conn.from[0], conn.from[1], radius);
+          let [x2, y2, z2] = latLngToXYZ(conn.to[0],   conn.to[1],   radius);
+          [x1, y1, z1] = rotateX(x1, y1, z1, rotX);
+          [x1, y1, z1] = rotateY(x1, y1, z1, rotY);
+          [x2, y2, z2] = rotateX(x2, y2, z2, rotX);
+          [x2, y2, z2] = rotateY(x2, y2, z2, rotY);
+          if (z1 < -radius * 0.3 && z2 < -radius * 0.3) continue;
+
+          const [sx1, sy1] = project(x1, y1, z1, cx, cy, fov);
+          const [sx2, sy2] = project(x2, y2, z2, cx, cy, fov);
+
+          // Elevated arc control point
+          const mX = (x1 + x2) / 2, mY = (y1 + y2) / 2, mZ = (z1 + z2) / 2;
+          const mLen = Math.sqrt(mX*mX + mY*mY + mZ*mZ);
+          const aH = radius * 1.25;
+          const [scx, scy] = project((mX/mLen)*aH, (mY/mLen)*aH, (mZ/mLen)*aH, cx, cy, fov);
+
+          ctx.beginPath();
+          ctx.moveTo(sx1, sy1);
+          ctx.quadraticCurveTo(scx, scy, sx2, sy2);
+          ctx.strokeStyle = ARC_COLOR;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          // Traveling dot
+          const t = (Math.sin(time * 1.2 + conn.from[0] * 0.1) + 1) / 2;
+          const tx = (1-t)*(1-t)*sx1 + 2*(1-t)*t*scx + t*t*sx2;
+          const ty = (1-t)*(1-t)*sy1 + 2*(1-t)*t*scy + t*t*sy2;
+          ctx.beginPath();
+          ctx.arc(tx, ty, 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = MARKER_COLOR;
+          ctx.fill();
+        }
+
+        // Markers
+        for (const m of MARKERS) {
+          let [x, y, z] = latLngToXYZ(m.lat, m.lng, radius);
+          [x, y, z] = rotateX(x, y, z, rotX);
+          [x, y, z] = rotateY(x, y, z, rotY);
+          if (z < -radius * 0.1) continue;
+
+          const [sx, sy] = project(x, y, z, cx, cy, fov);
+          const pulse = Math.sin(time * 2 + m.lat) * 0.5 + 0.5;
+
+          // Pulse ring
+          ctx.beginPath();
+          ctx.arc(sx, sy, 4 + pulse * 5, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(195,164,76,${(0.15 + pulse * 0.2).toFixed(2)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Core dot
+          ctx.beginPath();
+          ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = MARKER_COLOR;
+          ctx.fill();
+
+          // Label
+          if (m.label) {
+            ctx.font = '10px Inter, system-ui, sans-serif';
+            ctx.fillStyle = 'rgba(195,164,76,0.65)';
+            ctx.fillText(m.label, sx + 8, sy + 3);
+          }
+        }
+
+        animId = requestAnimationFrame(draw);
+      }
+
+      // Start immediately — globe is in the hero, always visible on load
+      draw();
+    })();
+    // ─────────────────────────────────────────────────────────────
+
+    // ─── ANIMATED STAT COUNTERS ───────────────────────────────
+    (function() {
+      const statsBar = document.querySelector('.stats-bar-inner');
+      if (!statsBar) return;
+      const statObserver = new IntersectionObserver(entries => {
+        if (!entries[0].isIntersecting) return;
+        statObserver.disconnect();
+        statsBar.querySelectorAll('.stat-item .num').forEach(el => {
+          const sup = el.querySelector('sup');
+          const rawText = el.childNodes[0] ? el.childNodes[0].textContent.trim() : '';
+          const hasM = rawText.includes('M');
+          const target = parseFloat(rawText.replace('M', ''));
+          if (isNaN(target)) return;
+          const supHTML = sup ? sup.outerHTML : '';
+          const duration = 1800;
+          const startTime = performance.now();
+          function step(now) {
+            const pct = Math.min((now - startTime) / duration, 1);
+            const ease = 1 - Math.pow(1 - pct, 4);
+            const val = Math.round(ease * target);
+            el.innerHTML = (hasM ? val + 'M' : val) + supHTML;
+            if (pct < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      }, { threshold: 0.6 });
+      statObserver.observe(statsBar);
+    })();
+    // ─────────────────────────────────────────────────────────
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
