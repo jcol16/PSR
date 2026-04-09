@@ -135,15 +135,18 @@ nav.nav--light .has-dropdown > a::after {
   top: calc(100% + 8px);
   left: 0;
   background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid rgba(137,42,61,0.1);
+  border-radius: 10px;
+  box-shadow:
+    0 12px 40px rgba(137,42,61,0.1),
+    0 4px 12px rgba(0,0,0,0.07),
+    0 1px 0 rgba(255,255,255,0.9) inset;
   min-width: 220px;
   padding: 8px;
   opacity: 0;
   visibility: hidden;
   transform: translateY(6px);
-  transition: opacity 0.2s cubic-bezier(0.16,1,0.3,1), transform 0.2s cubic-bezier(0.16,1,0.3,1), visibility 0.2s;
+  transition: opacity 0.22s cubic-bezier(0.16,1,0.3,1), transform 0.22s cubic-bezier(0.16,1,0.3,1), visibility 0.22s;
   z-index: 200;
 }
 .has-dropdown:hover .dropdown {
@@ -155,21 +158,36 @@ nav.nav--light .has-dropdown > a::after {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 12px;
+  padding: 10px 14px;
   font-family: 'Inter', sans-serif;
   font-size: 13.5px;
   font-weight: 500;
   color: var(--ink) !important;
   text-decoration: none;
-  border-radius: 5px;
-  transition: background 0.15s, color 0.15s;
+  border-radius: 6px;
+  transition: background 0.18s cubic-bezier(0.16,1,0.3,1), color 0.18s cubic-bezier(0.16,1,0.3,1), box-shadow 0.18s cubic-bezier(0.16,1,0.3,1), transform 0.18s cubic-bezier(0.16,1,0.3,1);
   white-space: nowrap;
 }
-.dropdown a:hover { background: rgba(137,42,61,0.06); color: var(--crimson) !important; }
+.dropdown a:hover {
+  background: rgba(137,42,61,0.06);
+  color: var(--crimson) !important;
+  box-shadow: inset 3px 0 0 var(--crimson);
+  transform: translateX(2px);
+}
+.dropdown a:active {
+  transform: translateX(1px) scale(0.99);
+  background: rgba(137,42,61,0.09);
+}
 .dropdown-divider {
   height: 1px;
-  background: var(--border);
-  margin: 6px 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(137,42,61,0.15) 15%,
+    rgba(195,164,76,0.25) 50%,
+    rgba(137,42,61,0.15) 85%,
+    transparent 100%
+  );
+  margin: 8px 4px;
 }
 .dropdown-label {
   font-family: 'Inter', sans-serif;
@@ -178,7 +196,7 @@ nav.nav--light .has-dropdown > a::after {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--mid-gray);
-  padding: 6px 12px 4px;
+  padding: 6px 14px 4px;
 }
 
 /* ─── CTA BUTTON ─── */
