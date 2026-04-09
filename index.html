@@ -920,29 +920,29 @@
     .demo-form-wrap {
       background: var(--white);
       border-radius: 10px;
-      padding: 44px 40px;
+      padding: 28px 32px;
       box-shadow: 0 24px 64px rgba(0,0,0,0.3);
     }
     .demo-form-title {
       font-family: 'DM Sans', sans-serif;
       font-weight: 600;
-      font-size: 20px;
+      font-size: 18px;
       letter-spacing: -0.02em;
       color: var(--ink);
-      margin-bottom: 28px;
-      padding-bottom: 20px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--border);
     }
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
     }
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-bottom: 18px;
+      gap: 4px;
+      margin-bottom: 12px;
     }
     .form-group.full { grid-column: 1 / -1; }
     .form-group label {
@@ -957,12 +957,12 @@
     .form-group select,
     .form-group textarea {
       font-family: 'Inter', sans-serif;
-      font-size: 14.5px;
+      font-size: 13px;
       color: var(--ink);
       background: var(--off-white);
       border: 1.5px solid var(--border);
       border-radius: 5px;
-      padding: 11px 14px;
+      padding: 8px 12px;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
       width: 100%;
@@ -972,13 +972,13 @@
     .form-group select {
       background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
+      background-position: right 12px center;
+      padding-right: 32px;
       cursor: pointer;
     }
     .form-group textarea {
       resize: vertical;
-      min-height: 100px;
+      min-height: 72px;
       line-height: 1.6;
     }
     .form-group input:focus,
@@ -2029,7 +2029,7 @@
 
   <!-- ─── CTA ─── -->
   <section class="cta-section" id="contact" data-nav-theme="dark">
-    <div class="container" style="padding-top: 80px; padding-bottom: 0;">
+    <div class="container" style="padding-top: 48px; padding-bottom: 0;">
       <div class="cta-inner">
 
         <!-- Left: copy -->
@@ -2102,39 +2102,42 @@
                 </select>
               </div>
               <div class="form-group">
-                <label for="email">Email Address *</label>
-                <input type="email" id="email" name="email" placeholder="your@email.com" required />
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" />
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" placeholder="your@email.com" required />
             </div>
 
-            <!-- Interest radio group -->
-            <div class="interest-group">
-              <div class="interest-label">I'm interested in... *</div>
-              <label class="interest-option">
-                <input type="radio" name="interest" value="on_highway" required />
-                <span class="radio-circle"></span>
-                <span class="interest-option-text">On Highway Applications</span>
-              </label>
-              <label class="interest-option">
-                <input type="radio" name="interest" value="off_highway" />
-                <span class="radio-circle"></span>
-                <span class="interest-option-text">Off Highway Applications</span>
-              </label>
-              <label class="interest-option">
-                <input type="radio" name="interest" value="both" />
-                <span class="radio-circle"></span>
-                <span class="interest-option-text">Both On and Off Highway</span>
-              </label>
+            <!-- Interest dropdown -->
+            <div class="form-group">
+              <label for="interest">I'm interested in... *</label>
+              <select id="interest" name="interest" required>
+                <option value="" disabled selected>Select an area of interest</option>
+                <option value="on_highway">On Highway Applications</option>
+                <option value="off_highway">Off Highway Applications</option>
+                <option value="both">Both On and Off Highway</option>
+              </select>
             </div>
 
             <div class="form-group">
               <label for="details">Details of Your Data Needs</label>
               <textarea id="details" name="details" placeholder="Tell us about the markets, segments, or regions you're focused on..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="referral">Where did you hear about us?</label>
+              <select id="referral" name="referral">
+                <option value="" disabled selected>Select an option</option>
+                <option value="ai">AI</option>
+                <option value="google">Google</option>
+                <option value="other">Other</option>
+                <option value="referral">Referral</option>
+                <option value="past_client">Worked with PSR previously</option>
+              </select>
             </div>
 
             <!-- GDPR -->
@@ -2189,6 +2192,14 @@
             <li><a href="#contact">Request a Quote</a></li>
             <li><a href="#contact">Careers</a></li>
           </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Power Systems Research. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Cookie Settings</a>
         </div>
       </div>
     </div>
