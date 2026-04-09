@@ -98,7 +98,7 @@
     .hero h1 {
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
-      font-size: clamp(34px, 4vw, 54px);
+      font-size: clamp(38px, 4.8vw, 64px);
       line-height: 1.08;
       letter-spacing: -0.03em;
       color: var(--white);
@@ -107,12 +107,13 @@
     .hero h1 strong {
       font-weight: 700;
       display: block;
-      background: linear-gradient(135deg, #C94060 0%, #892A3D 45%, #D4556E 100%);
+      font-size: 1.35em;
+      background: linear-gradient(135deg, #D4556E 0%, #C94060 40%, #D4556E 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       text-shadow: none;
-      filter: drop-shadow(0 0 32px rgba(137, 42, 61, 0.75)) drop-shadow(0 0 12px rgba(201, 64, 96, 0.5));
+      filter: drop-shadow(0 0 24px rgba(201, 64, 96, 0.8)) drop-shadow(0 0 8px rgba(201, 64, 96, 0.6)) drop-shadow(0 0 48px rgba(137, 42, 61, 0.5));
     }
 
     .hero-sub-italic {
@@ -153,9 +154,9 @@
       border-radius: 4px;
       text-decoration: none;
       letter-spacing: 0.01em;
-      transition: background 0.2s, transform 0.15s;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
     }
-    .btn-primary:hover { background: var(--crimson-light); transform: translateY(-1px); }
+    .btn-primary:hover { background: var(--crimson-light); transform: translateY(-1px); box-shadow: 0 0 12px rgba(137,42,61,0.7), 0 0 28px rgba(137,42,61,0.4), 0 0 56px rgba(137,42,61,0.2); }
 
     .btn-outline {
       display: inline-flex;
@@ -170,9 +171,9 @@
       padding: 13px 24px;
       border-radius: 4px;
       text-decoration: none;
-      transition: border-color 0.2s, color 0.2s;
+      transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
     }
-    .btn-outline:hover { border-color: rgba(255,255,255,0.6); color: var(--white); }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.6); color: var(--white); box-shadow: 0 0 12px rgba(255,255,255,0.25), 0 0 28px rgba(255,255,255,0.12), 0 0 56px rgba(255,255,255,0.06); }
 
     /* Hero visual */
     .hero-visual {
@@ -867,7 +868,7 @@
       border-top: 1px solid rgba(255,255,255,0.06);
       position: relative;
       overflow: hidden;
-      padding: 0;
+      padding: 0 0 80px;
     }
     .cta-section::before {
       content: '';
@@ -1157,10 +1158,20 @@
       background: var(--ink);
       color: var(--white);
       padding: 56px 0 0;
+      position: relative;
+    }
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--crimson) 20%, var(--crimson) 80%, transparent 100%);
+      opacity: 0.85;
+      box-shadow: 0 0 8px rgba(137,42,61,0.6), 0 0 20px rgba(137,42,61,0.35), 0 0 40px rgba(137,42,61,0.2);
     }
     .footer-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 60px;
       padding-bottom: 44px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -1182,10 +1193,10 @@
     .footer-col h5 {
       font-family: 'Inter', sans-serif;
       font-weight: 600;
-      font-size: 11px;
+      font-size: 14px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
+      color: #C9A84C;
       margin-bottom: 20px;
     }
     .footer-col ul {
@@ -1599,7 +1610,6 @@
           The Global<br />
           <strong>Standard.</strong>
         </h1>
-        <p class="hero-sub-italic">Powerful Possibilities™</p>
         <p>PSR analysts collect and analyze global engine and powertrain data to develop targeted forecasts by industry segment and region — delivering the market intelligence that OEMs, dealers, and fleet managers rely on.</p>
         <div class="hero-actions">
           <a href="solutions.html" class="btn-primary">
@@ -2150,11 +2160,6 @@
   <footer>
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand">
-          <img src="PSR_Logo.jpeg" alt="PSR Logo" />
-          <p>The global standard in powertrain intelligence — delivering market clarity to OEMs, engine manufacturers, and fleet managers worldwide since 1976.</p>
-          <div class="tagline">Powerful Possibilities™</div>
-        </div>
         <div class="footer-col">
           <h5>Solutions</h5>
           <ul>
@@ -2184,14 +2189,6 @@
             <li><a href="#contact">Request a Quote</a></li>
             <li><a href="#contact">Careers</a></li>
           </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 2026 Power Systems Research. All rights reserved.</p>
-        <div class="footer-bottom-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Use</a>
-          <a href="#">Cookie Settings</a>
         </div>
       </div>
     </div>
