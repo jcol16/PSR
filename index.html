@@ -1259,6 +1259,7 @@
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .cta-inner { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
+      .form-row.keep-cols { grid-template-columns: 1fr 1fr; }
       .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
       .stat-item:nth-child(2) { border-right: none; }
       .stat-item:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.15); }
@@ -2061,7 +2062,7 @@
           <div class="demo-form-title">Tell us about your needs</div>
           <form onsubmit="handleFormSubmit(event)">
 
-            <div class="form-row">
+            <div class="form-row keep-cols">
               <div class="form-group">
                 <label for="first-name">First Name *</label>
                 <input type="text" id="first-name" name="first_name" placeholder="First name" required />
@@ -2072,7 +2073,7 @@
               </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row keep-cols">
               <div class="form-group">
                 <label for="organization">Organization *</label>
                 <input type="text" id="organization" name="organization" placeholder="Company name" required />
