@@ -50,11 +50,21 @@
     .page-hero h1 strong { font-weight: 700; }
     .page-hero p { font-size: 17px; line-height: 1.75; color: rgba(255,255,255,0.55); max-width: 560px; }
 
-    /* ─── PLACEHOLDER ─── */
-    .placeholder-section { padding: 100px 0; background: var(--off-white); }
+    /* ─── CONTENT ─── */
+    .content-section { padding: 100px 0; background: var(--off-white); }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
-    .placeholder-box { background: var(--white); border: 1.5px dashed var(--border); border-radius: 8px; padding: 80px 40px; text-align: center; }
-    .placeholder-box p { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--mid-gray); line-height: 1.7; }
+    .content-inner { max-width: 800px; }
+    .content-inner h2 { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: clamp(28px, 3.5vw, 42px); letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+    .content-inner h2 strong { font-weight: 700; }
+    .content-inner p { font-size: 16px; line-height: 1.8; color: var(--slate); margin-bottom: 24px; }
+    .content-inner ul { list-style: none; margin: 0 0 40px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+    .content-inner ul li { font-size: 15px; line-height: 1.6; color: var(--slate); padding-left: 20px; position: relative; }
+    .content-inner ul li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--crimson); }
+    .content-divider { border: none; border-top: 1.5px solid var(--border); margin: 48px 0; }
+    .content-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson); margin-bottom: 20px; }
+    .content-eyebrow::before { content: ''; display: block; width: 20px; height: 1.5px; background: var(--crimson); }
+    .content-quote { border-left: 3px solid var(--gold); padding: 4px 0 4px 24px; margin: 0 0 40px; }
+    .content-quote p { font-family: 'EB Garamond', serif; font-style: italic; font-size: 20px; line-height: 1.6; color: var(--ink); margin-bottom: 0; }
 
     /* ─── FOOTER ─── */
     footer { background: var(--ink); color: var(--white); padding: 72px 0 0; }
@@ -232,7 +242,7 @@
         </div>
         <div class="page-eyebrow">Industries We Track</div>
         <h1><strong>Recreational Products</strong></h1>
-        <p>Content for this page is coming soon. Check back for detailed information about Recreational Products.</p>
+        <p>Global motorcycle, ATV, and powersports production data — five-year forecasts by region and segment, updated quarterly.</p>
       </div>
       <div class="page-hero-image">
         <div class="page-hero-image-frame">
@@ -244,10 +254,48 @@
     </div>
   </div>
 
-  <section class="placeholder-section" data-nav-theme="light">
+  <section class="content-section" data-nav-theme="light">
     <div class="container">
-      <div class="placeholder-box">
-        <p>This page is being prepared. Content will be added shortly.<br />In the meantime, <a href="index.html#contact" style="color:var(--crimson);font-weight:600;">contact our team</a> for more information about Recreational Products.</p>
+      <div class="content-inner">
+
+        <div class="content-eyebrow">Global Coverage</div>
+        <h2><strong>Global Motorcycle, ATV and Powersports</strong> Production Data</h2>
+        <p>Need to gauge demand and competition in the recreation products market? PSR's analysis includes five-year forecasts by region and industry segment as well as quarterly updates of our databases, which are distributed to our clients in the form of extensive Update Bulletins.</p>
+
+        <hr class="content-divider" />
+
+        <div class="content-eyebrow">Applications Tracked</div>
+        <h2>Recreational Vehicle <strong>Applications</strong></h2>
+        <ul>
+          <li>Go Karts</li>
+          <li>Golf Cars</li>
+          <li>Motorcycles, Scooters and Mopeds</li>
+          <li>ATVs and Side by Side vehicles</li>
+          <li>Personal Watercraft (PWCs)</li>
+          <li>Snowmobiles</li>
+          <li>e-Mobility</li>
+        </ul>
+
+        <hr class="content-divider" />
+
+        <div class="content-eyebrow">e-Mobility</div>
+        <h2>The Rise of <strong>Electric Mobility</strong></h2>
+        <p>The Recreational Products segment is playing a significant role in the growth of the electric mobility market. Growth is being driven by policies that encourage lower greenhouse gas emissions and consumer interest in less expensive and more energy-efficient transportation. In addition, businesses built around the Mobility-as-a-Service (MaaS) model, which allow consumers to conveniently rent e-bikes and e-scooters using an app, are also playing an important role in the growth of the e-mobility segment.</p>
+        <p>In the powersports category, which includes ATVs, snowmobiles, PWC, motorcycles and snowmobiles, IC engine-powered models continue to dominate. High performance is a key selling point in the category, and the transition to electrification has so far been limited by the lower power output, limited range, reliability, and long charging times of battery-powered models.</p>
+
+        <hr class="content-divider" />
+
+        <div class="content-eyebrow">Power Source Data</div>
+        <h2>OEM Power Source <strong>Classifications</strong></h2>
+        <p>PSR is continually updating its OEM Power Source classifications for the Recreational Products segment to provide deeper insights into an expanded range of OEM Drive Type configurations that use one or more OEM Power Sources, including IC engine and battery systems. Power source installation data for Recreational Products can be found in our <a href="oe-link.html" style="color:var(--crimson);font-weight:500;">OE Link&#x2122;</a> database covering the production of original equipment.</p>
+
+        <hr class="content-divider" />
+
+        <div class="content-quote">
+          <p>To see a complete list of the Recreational Vehicle applications we track, visit the Product Definitions Guide — a complete list of some 250 products that Power Systems Research tracks in 13 major industrial segments.</p>
+        </div>
+        <p>Our analysis of the global Recreational Products segment emphasizes North America because of the size and diversity of the NA recreational products market.</p>
+
       </div>
     </div>
   </section>
