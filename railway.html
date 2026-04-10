@@ -32,13 +32,13 @@
     .page-hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 60px 60px; }
     .page-hero-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 2; display: flex; align-items: center; gap: 72px; }
     .page-hero-content { flex: 1; min-width: 0; }
-    .page-hero-image { flex: 0 0 440px; position: relative; }
+    .page-hero-image { flex: 0 0 520px; position: relative; }
     .page-hero-image-frame { position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 4px 16px rgba(137,42,61,0.2); }
-    .page-hero-image-frame img { display: block; width: 100%; height: 320px; object-fit: cover; }
+    .page-hero-image-frame img { display: block; width: 100%; height: auto; object-fit: contain; }
     .page-hero-image-frame::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(137,42,61,0.08) 0%, transparent 60%); pointer-events: none; }
     .page-hero-image-accent { position: absolute; top: -12px; right: -12px; width: 100%; height: 100%; border: 1.5px solid rgba(195,164,76,0.25); border-radius: 8px; z-index: -1; }
     .page-hero-image-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 16px; background: linear-gradient(to top, rgba(26,26,36,0.85) 0%, transparent 100%); font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
-    @media (max-width: 1024px) { .page-hero-image { flex: 0 0 340px; } }
+    @media (max-width: 1024px) { .page-hero-image { flex: 0 0 420px; } }
     @media (max-width: 768px) { .page-hero-inner { flex-direction: column; gap: 40px; } .page-hero-image { flex: none; width: 100%; } }
     .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 32px; font-size: 13px; color: rgba(255,255,255,0.4); }
     .breadcrumb a { color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
@@ -95,8 +95,9 @@
         </div>
       </a>
       <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
         <li class="has-dropdown">
-          <a href="index.html#industries">Industries</a>
+          <a>Industries</a>
           <div class="dropdown">
             <div class="dropdown-label">Industries We Track</div>
             <a href="agricultural.html">Agricultural</a>
@@ -159,6 +160,7 @@
             <a href="office-russia.html">Russia</a>
           </div>
         </li>
+        <li><a href="downloadable-resources.html">Resources</a></li>
         <li><a href="index.html#contact" class="nav-cta">Request a Quote</a></li>
       </ul>
       <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
@@ -169,6 +171,7 @@
 
   <!-- ─── MOBILE NAV ─── -->
   <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+    <a href="index.html" style="font-weight:600;border-bottom:1px solid var(--border);">Home</a>
     <div class="mobile-nav-section">
       <div class="mobile-nav-heading">Industries</div>
       <a href="agricultural.html">Agricultural</a>
@@ -210,19 +213,20 @@
       <a href="why-psr.html">Why PSR?</a>
       <a href="call-center.html">In-house Call Center</a>
     </div>
+    <a href="downloadable-resources.html" style="font-weight:500;">Resources</a>
     <div class="mobile-nav-cta">
       <a href="index.html#contact">Request a Quote</a>
     </div>
   </div>
 
-  <div class="page-hero">
+  <div class="page-hero" data-nav-theme="dark">
     <div class="page-hero-grid"></div>
     <div class="page-hero-inner">
       <div class="page-hero-content">
         <div class="breadcrumb">
           <a href="index.html">Home</a>
           <span>/</span>
-          <a href="index.html">Industries</a>
+          <a>Industries</a>
           <span>/</span>
           <span style="color:rgba(255,255,255,0.6);">Railway</span>
         </div>
@@ -232,7 +236,7 @@
       </div>
       <div class="page-hero-image">
         <div class="page-hero-image-frame">
-          <img src="https://images.unsplash.com/photo-1555861496-0666c8981751?w=880&q=80&fit=crop" alt="Railway locomotive on tracks" />
+          <img src="Brand_Assets/Railway.png" alt="Railway" />
           <div class="page-hero-image-label">Railway Segment</div>
         </div>
         <div class="page-hero-image-accent"></div>
@@ -240,7 +244,7 @@
     </div>
   </div>
 
-  <section class="placeholder-section">
+  <section class="placeholder-section" data-nav-theme="light">
     <div class="container">
       <div class="placeholder-box">
         <p>This page is being prepared. Content will be added shortly.<br />In the meantime, <a href="index.html#contact" style="color:var(--crimson);font-weight:600;">contact our team</a> for more information about Railway.</p>
