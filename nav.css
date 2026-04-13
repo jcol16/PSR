@@ -117,6 +117,7 @@ nav.nav--light .has-dropdown:hover > a {
   white-space: nowrap;
 }
 .nav-links > li > a:hover { color: var(--crimson) !important; background: rgba(137,42,61,0.05); }
+.nav-links > li > a.nav-cta:hover { color: var(--white) !important; }
 
 /* Dropdown chevron */
 .has-dropdown > a::after {
