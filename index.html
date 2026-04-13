@@ -10,10 +10,10 @@
   <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin />
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js" as="script" />
   <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js" defer></script>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=EB+Garamond:ital,wght@1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=EB+Garamond:ital,wght@1,400;1,500&family=Inter:wght@400;500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
   <script>
     // Start GeoJSON fetch immediately — runs in parallel with D3 loading and HTML parsing
-    window._landDataPromise = fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json').then(r => r.json());
+    window._landDataPromise = fetch('ne_110m_land.json').then(r => r.json());
   </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
