@@ -1358,7 +1358,8 @@
 
     @media (max-width: 480px) {
       .footer-grid { flex-wrap: wrap; gap: 24px 32px; }
-      .footer-col { width: 110px; }
+      .footer-brand { flex: 0 0 100%; }
+      .footer-col { width: calc(50% - 16px); }
       .footer-bottom {
         flex-direction: column;
         align-items: flex-start;
@@ -2282,6 +2283,11 @@
   <footer>
     <div class="container">
       <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="Brand_Assets/PSR Logo2.png" alt="PSR Logo" />
+          <p>The global standard in powertrain intelligence — delivering market clarity to OEMs, engine manufacturers, and fleet managers worldwide since 1976.</p>
+          <div class="tagline">Powerful Possibilities™</div>
+        </div>
         <div class="footer-col">
           <h5>Solutions</h5>
           <ul>
