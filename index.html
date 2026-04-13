@@ -2369,228 +2369,193 @@
       btn.disabled = true;
     }
 
-    // ─── PSR GLOBE ───────────────────────────────────────────────
+    // ─── PSR GLOBE (D3 Real Land) ────────────────────────────────
     (function() {
       const canvas = document.getElementById('psr-globe');
       if (!canvas) return;
 
-      const MARKERS = [
-        // North America
-        { lat: 43.65,  lng: -79.38,  label: "Toronto" },
-        { lat: 41.88,  lng: -87.63,  label: "Chicago" },
-        { lat: 29.76,  lng: -95.37,  label: "Houston" },
-        { lat: 45.50,  lng: -73.57,  label: "Montreal" },
-        // Europe
-        { lat: 51.51,  lng: -0.13,   label: "London" },
-        { lat: 52.52,  lng: 13.40,   label: "Berlin" },
-        { lat: 48.86,  lng: 2.35,    label: "Paris" },
-        { lat: 45.46,  lng: 9.19,    label: "Milan" },
-        { lat: 59.33,  lng: 18.07,   label: "Stockholm" },
-        // China & Asia
-        { lat: 39.91,  lng: 116.39,  label: "Beijing" },
-        { lat: 31.23,  lng: 121.47,  label: "Shanghai" },
-        { lat: 22.54,  lng: 114.06,  label: "Shenzhen" },
-        { lat: 35.69,  lng: 139.69,  label: "Tokyo" },
-        { lat: 37.57,  lng: 126.98,  label: "Seoul" },
-        // Rest of world
-        { lat: 19.08,  lng: 72.88,   label: "Mumbai" },
-        { lat: -33.87, lng: 151.21,  label: "Sydney" },
-        { lat: -26.20, lng: 28.04,   label: "Johannesburg" },
-        { lat: -23.55, lng: -46.63,  label: "São Paulo" },
-        { lat: 25.20,  lng: 55.27,   label: "Dubai" },
-      ];
-
-      const CONNECTIONS = [
-        // North America ↔ Europe
-        { from: [43.65, -79.38],  to: [51.51, -0.13] },
-        { from: [41.88, -87.63],  to: [52.52, 13.40] },
-        { from: [41.88, -87.63],  to: [48.86, 2.35] },
-        // Europe ↔ Asia
-        { from: [51.51, -0.13],   to: [39.91, 116.39] },
-        { from: [52.52, 13.40],   to: [19.08, 72.88] },
-        { from: [48.86, 2.35],    to: [25.20, 55.27] },
-        // China internal / Asia
-        { from: [39.91, 116.39],  to: [31.23, 121.47] },
-        { from: [31.23, 121.47],  to: [35.69, 139.69] },
-        { from: [35.69, 139.69],  to: [37.57, 126.98] },
-        // North America ↔ South America
-        { from: [29.76, -95.37],  to: [-23.55, -46.63] },
-        // Asia ↔ Australia
-        { from: [22.54, 114.06],  to: [-33.87, 151.21] },
-        // Europe ↔ Africa
-        { from: [45.46, 9.19],    to: [-26.20, 28.04] },
-        // Middle East hub
-        { from: [25.20, 55.27],   to: [19.08, 72.88] },
-        { from: [25.20, 55.27],   to: [-26.20, 28.04] },
-      ];
-
-      const DOT_COLOR    = 'rgba(180, 80, 100, ALPHA)';
-      const ARC_COLOR    = 'rgba(195, 164, 76, 0.75)';
-      const MARKER_COLOR = 'rgba(220, 190, 90, 1)';
-
-      const DOTS = [];
-      const NUM_DOTS = 1400;
-      const goldenRatio = (1 + Math.sqrt(5)) / 2;
-      for (let i = 0; i < NUM_DOTS; i++) {
-        const theta = (2 * Math.PI * i) / goldenRatio;
-        const phi = Math.acos(1 - (2 * (i + 0.5)) / NUM_DOTS);
-        DOTS.push([
-          Math.cos(theta) * Math.sin(phi),
-          Math.cos(phi),
-          Math.sin(theta) * Math.sin(phi),
-        ]);
-      }
-
-      function latLngToXYZ(lat, lng, r) {
-        const phi   = ((90 - lat) * Math.PI) / 180;
-        const theta = (lng * Math.PI) / 180;
-        return [
-           r * Math.sin(phi) * Math.cos(theta),
-           r * Math.cos(phi),
-           r * Math.sin(phi) * Math.sin(theta),
-        ];
-      }
-
-      function rotateY(x, y, z, a) {
-        const c = Math.cos(a), s = Math.sin(a);
-        return [x * c + z * s, y, -x * s + z * c];
-      }
-
-      function rotateX(x, y, z, a) {
-        const c = Math.cos(a), s = Math.sin(a);
-        return [x, y * c - z * s, y * s + z * c];
-      }
-
-      function project(x, y, z, cx, cy, fov) {
-        const scale = fov / (fov + z);
-        return [x * scale + cx, -y * scale + cy];
-      }
-
-      let rotY = 0.5, rotX = 0.25, time = 0;
-      const AUTO_SPEED = 0.002;
-      let drag = { active: false, startX: 0, startY: 0, startRotY: 0, startRotX: 0 };
-      let animId;
-
-      canvas.addEventListener('pointerdown', e => {
-        drag = { active: true, startX: e.clientX, startY: e.clientY, startRotY: rotY, startRotX: rotX };
-        canvas.setPointerCapture(e.pointerId);
-        canvas.style.cursor = 'grabbing';
-      });
-      canvas.addEventListener('pointermove', e => {
-        if (!drag.active) return;
-        rotY = drag.startRotY + (e.clientX - drag.startX) * 0.005;
-        rotX = Math.max(-1, Math.min(1, drag.startRotX + (e.clientY - drag.startY) * 0.005));
-      });
-      canvas.addEventListener('pointerup', () => { drag.active = false; canvas.style.cursor = 'grab'; });
-
-      function draw() {
-        const dpr = window.devicePixelRatio || 1;
-        const w = canvas.clientWidth;
-        const h = canvas.clientHeight;
-        canvas.width  = w * dpr;
-        canvas.height = h * dpr;
+      function initGlobe() {
         const ctx = canvas.getContext('2d');
-        ctx.scale(dpr, dpr);
+        if (!ctx) return;
 
-        const cx = w / 2, cy = h / 2;
-        const radius = Math.min(w, h) * 0.40;
-        const fov = 600;
+        // PSR brand colors
+        const OCEAN_COLOR  = '#000000';
+        const BORDER_COLOR = 'rgba(137,42,61,0.55)';
+        const GRID_COLOR   = 'rgba(255,255,255,0.12)';
+        const LAND_COLOR   = 'rgba(195,164,76,0.55)';
+        const DOT_COLOR    = 'rgba(137,42,61,0.88)';
 
-        if (!drag.active) rotY += AUTO_SPEED;
-        time += 0.015;
+        let w, h, radius, projection, path, graticuleGen;
+        const rotation = [0, 0];
+        let autoRotate = true;
+        const allDots = [];
+        let landFeatures = null;
+        let rotTimer;
 
-        ctx.clearRect(0, 0, w, h);
+        function setup() {
+          w = canvas.clientWidth || 480;
+          h = canvas.clientHeight || 480;
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width  = w * dpr;
+          canvas.height = h * dpr;
+          ctx.scale(dpr, dpr);
 
-        const glow = ctx.createRadialGradient(cx, cy, radius * 0.7, cx, cy, radius * 1.6);
-        glow.addColorStop(0, 'rgba(137,42,61,0.04)');
-        glow.addColorStop(1, 'rgba(137,42,61,0)');
-        ctx.fillStyle = glow;
-        ctx.fillRect(0, 0, w, h);
+          radius = Math.min(w, h) * 0.44;
 
-        ctx.beginPath();
-        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(137,42,61,0.1)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
+          projection = d3.geoOrthographic()
+            .scale(radius)
+            .translate([w / 2, h / 2])
+            .clipAngle(90);
 
-        for (const dot of DOTS) {
-          let [x, y, z] = [dot[0] * radius, dot[1] * radius, dot[2] * radius];
-          [x, y, z] = rotateX(x, y, z, rotX);
-          [x, y, z] = rotateY(x, y, z, rotY);
-          if (z < 0) continue;
-          const [sx, sy] = project(x, y, z, cx, cy, fov);
-          const alpha = Math.max(0.35, (z + radius) / (2 * radius));
-          const dotR  = 1.1 + alpha * 1.0;
-          ctx.beginPath();
-          ctx.arc(sx, sy, dotR, 0, Math.PI * 2);
-          ctx.fillStyle = DOT_COLOR.replace('ALPHA', alpha.toFixed(2));
-          ctx.fill();
+          path = d3.geoPath().projection(projection).context(ctx);
+          graticuleGen = d3.geoGraticule();
         }
 
-        for (const conn of CONNECTIONS) {
-          let [x1, y1, z1] = latLngToXYZ(conn.from[0], conn.from[1], radius);
-          let [x2, y2, z2] = latLngToXYZ(conn.to[0],   conn.to[1],   radius);
-          [x1, y1, z1] = rotateX(x1, y1, z1, rotX);
-          [x1, y1, z1] = rotateY(x1, y1, z1, rotY);
-          [x2, y2, z2] = rotateX(x2, y2, z2, rotX);
-          [x2, y2, z2] = rotateY(x2, y2, z2, rotY);
-          if (z1 < -radius * 0.3 && z2 < -radius * 0.3) continue;
-
-          const [sx1, sy1] = project(x1, y1, z1, cx, cy, fov);
-          const [sx2, sy2] = project(x2, y2, z2, cx, cy, fov);
-
-          const mX = (x1 + x2) / 2, mY = (y1 + y2) / 2, mZ = (z1 + z2) / 2;
-          const mLen = Math.sqrt(mX*mX + mY*mY + mZ*mZ);
-          const aH = radius * 1.25;
-          const [scx, scy] = project((mX/mLen)*aH, (mY/mLen)*aH, (mZ/mLen)*aH, cx, cy, fov);
-
-          ctx.beginPath();
-          ctx.moveTo(sx1, sy1);
-          ctx.quadraticCurveTo(scx, scy, sx2, sy2);
-          ctx.strokeStyle = ARC_COLOR;
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-
-          const t = (Math.sin(time * 1.2 + conn.from[0] * 0.1) + 1) / 2;
-          const tx = (1-t)*(1-t)*sx1 + 2*(1-t)*t*scx + t*t*sx2;
-          const ty = (1-t)*(1-t)*sy1 + 2*(1-t)*t*scy + t*t*sy2;
-          ctx.beginPath();
-          ctx.arc(tx, ty, 2.2, 0, Math.PI * 2);
-          ctx.fillStyle = MARKER_COLOR;
-          ctx.fill();
-        }
-
-        for (const m of MARKERS) {
-          let [x, y, z] = latLngToXYZ(m.lat, m.lng, radius);
-          [x, y, z] = rotateX(x, y, z, rotX);
-          [x, y, z] = rotateY(x, y, z, rotY);
-          if (z < -radius * 0.1) continue;
-
-          const [sx, sy] = project(x, y, z, cx, cy, fov);
-          const pulse = Math.sin(time * 2 + m.lat) * 0.5 + 0.5;
-
-          ctx.beginPath();
-          ctx.arc(sx, sy, 4 + pulse * 5, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(195,164,76,${(0.15 + pulse * 0.2).toFixed(2)})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = MARKER_COLOR;
-          ctx.fill();
-
-          if (m.label) {
-            ctx.font = '10px Inter, system-ui, sans-serif';
-            ctx.fillStyle = 'rgba(195,164,76,0.65)';
-            ctx.fillText(m.label, sx + 8, sy + 3);
+        // ── Dot helpers ──────────────────────────────────────────
+        function pointInRing(pt, ring) {
+          const [x, y] = pt;
+          let inside = false;
+          for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+            const [xi, yi] = ring[i], [xj, yj] = ring[j];
+            if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi)
+              inside = !inside;
           }
+          return inside;
         }
 
-        animId = requestAnimationFrame(draw);
+        function pointInFeature(pt, feature) {
+          const g = feature.geometry;
+          if (g.type === 'Polygon') {
+            if (!pointInRing(pt, g.coordinates[0])) return false;
+            for (let i = 1; i < g.coordinates.length; i++)
+              if (pointInRing(pt, g.coordinates[i])) return false;
+            return true;
+          }
+          if (g.type === 'MultiPolygon') {
+            for (const poly of g.coordinates) {
+              if (!pointInRing(pt, poly[0])) continue;
+              let hole = false;
+              for (let i = 1; i < poly.length; i++)
+                if (pointInRing(pt, poly[i])) { hole = true; break; }
+              if (!hole) return true;
+            }
+          }
+          return false;
+        }
+
+        function generateDots(feature) {
+          const dots = [];
+          const [[minLng, minLat], [maxLng, maxLat]] = d3.geoBounds(feature);
+          const step = 16 * 0.08; // ~1.28° spacing
+          for (let lng = minLng; lng <= maxLng; lng += step)
+            for (let lat = minLat; lat <= maxLat; lat += step)
+              if (pointInFeature([lng, lat], feature)) dots.push([lng, lat]);
+          return dots;
+        }
+
+        // ── Render ───────────────────────────────────────────────
+        function render() {
+          ctx.clearRect(0, 0, w, h);
+          const scale = projection.scale();
+
+          // Ocean
+          ctx.beginPath();
+          ctx.arc(w / 2, h / 2, scale, 0, Math.PI * 2);
+          ctx.fillStyle = OCEAN_COLOR;
+          ctx.fill();
+          ctx.strokeStyle = BORDER_COLOR;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          if (!landFeatures) return;
+
+          // Graticule
+          ctx.beginPath();
+          path(graticuleGen());
+          ctx.strokeStyle = GRID_COLOR;
+          ctx.lineWidth = 0.7;
+          ctx.stroke();
+
+          // Land outlines
+          ctx.beginPath();
+          landFeatures.features.forEach(f => path(f));
+          ctx.strokeStyle = LAND_COLOR;
+          ctx.lineWidth = 0.9;
+          ctx.stroke();
+
+          // Halftone dots on land
+          allDots.forEach(([lng, lat]) => {
+            const pr = projection([lng, lat]);
+            if (!pr) return;
+            const [px, py] = pr;
+            if (px < 0 || px > w || py < 0 || py > h) return;
+            ctx.beginPath();
+            ctx.arc(px, py, 1.3, 0, Math.PI * 2);
+            ctx.fillStyle = DOT_COLOR;
+            ctx.fill();
+          });
+        }
+
+        // ── Init ─────────────────────────────────────────────────
+        setup();
+
+        fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json')
+          .then(r => r.json())
+          .then(data => {
+            landFeatures = data;
+            data.features.forEach(f => generateDots(f).forEach(pt => allDots.push(pt)));
+            render();
+          });
+
+        rotTimer = d3.timer(() => {
+          if (autoRotate) {
+            rotation[0] += 0.25;
+            projection.rotate(rotation);
+            render();
+          }
+        });
+
+        // ── Interaction ──────────────────────────────────────────
+        canvas.addEventListener('pointerdown', e => {
+          autoRotate = false;
+          const startX = e.clientX, startY = e.clientY;
+          const startRot = [...rotation];
+          canvas.setPointerCapture(e.pointerId);
+          canvas.style.cursor = 'grabbing';
+
+          function onMove(ev) {
+            rotation[0] = startRot[0] + (ev.clientX - startX) * 0.4;
+            rotation[1] = Math.max(-90, Math.min(90, startRot[1] - (ev.clientY - startY) * 0.4));
+            projection.rotate(rotation);
+            render();
+          }
+          function onUp() {
+            canvas.style.cursor = 'grab';
+            canvas.removeEventListener('pointermove', onMove);
+            canvas.removeEventListener('pointerup', onUp);
+            setTimeout(() => { autoRotate = true; }, 10);
+          }
+          canvas.addEventListener('pointermove', onMove);
+          canvas.addEventListener('pointerup', onUp);
+        });
+
+        canvas.addEventListener('wheel', e => {
+          e.preventDefault();
+          const factor = e.deltaY > 0 ? 0.9 : 1.1;
+          projection.scale(Math.max(radius * 0.5, Math.min(radius * 3, projection.scale() * factor)));
+          render();
+        }, { passive: false });
       }
 
-      draw();
+      // Load D3 dynamically if not already present
+      if (typeof d3 !== 'undefined') {
+        initGlobe();
+      } else {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
+        s.onload = initGlobe;
+        document.head.appendChild(s);
+      }
     })();
     // ─────────────────────────────────────────────────────────────
 
