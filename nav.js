@@ -18,17 +18,36 @@
   const themedSections = Array.from(document.querySelectorAll('[data-nav-theme]'));
   function updateNavTheme() {
     const navBottom = nav.getBoundingClientRect().bottom;
-    let theme = 'dark';
+
+    // 1. Prefer explicit data-nav-theme sections (homepage)
+    let theme = null;
     themedSections.forEach(section => {
       const rect = section.getBoundingClientRect();
       if (rect.top <= navBottom && rect.bottom > navBottom) {
         theme = section.dataset.navTheme;
       }
     });
+
+    // 2. Fallback: detect background colour of the element under the nav
+    if (theme === null) {
+      const els = document.elementsFromPoint(window.innerWidth / 2, navBottom + 1);
+      for (const el of els) {
+        if (el === nav || nav.contains(el)) continue;
+        const bg = window.getComputedStyle(el).backgroundColor;
+        if (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') continue;
+        const [r, g, b] = bg.match(/\d+/g).map(Number);
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        theme = luminance > 0.5 ? 'light' : 'dark';
+        break;
+      }
+      if (theme === null) theme = 'dark';
+    }
+
     nav.classList.toggle('nav--light', theme === 'light');
   }
   window.addEventListener('scroll', updateNavTheme, { passive: true });
   updateNavTheme();
+  window.addEventListener('load', updateNavTheme);
 
   // ── Mobile hamburger toggle ──
   if (hamburger && mobileNav) {

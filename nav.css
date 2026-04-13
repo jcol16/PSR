@@ -28,6 +28,13 @@ nav::after {
 nav.scrolled {
   background: rgba(255, 255, 255, 0.06);
 }
+nav.nav--light {
+  background: rgba(255, 255, 255, 0.88);
+}
+nav.scrolled.nav--light {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.07);
+}
 nav.nav--light .nav-logo-text .name,
 nav.nav--light .nav-logo-text .tag {
   color: var(--ink);
@@ -37,6 +44,10 @@ nav.nav--light .nav-links > li > a {
 }
 nav.nav--light .has-dropdown > a::after {
   background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%231A1A24' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+nav.nav--light .nav-links > li > a:hover,
+nav.nav--light .has-dropdown:hover > a {
+  color: var(--crimson) !important;
 }
 
 .nav-inner {
@@ -71,12 +82,14 @@ nav.nav--light .has-dropdown > a::after {
   font-size: 15px;
   color: var(--white);
   letter-spacing: -0.01em;
+  transition: color 0.3s ease;
 }
 .nav-logo-text .tag {
   font-family: 'EB Garamond', serif;
   font-style: italic;
   font-size: 12px;
   color: var(--white);
+  transition: color 0.3s ease;
 }
 
 /* ─── PILL NAV ─── */
@@ -112,7 +125,7 @@ nav.nav--light .has-dropdown > a::after {
   border-radius: 9999px;
   white-space: nowrap;
 }
-.nav-links > li > a:hover { color: var(--crimson); background: rgba(137,42,61,0.05); }
+.nav-links > li > a:hover { color: var(--crimson) !important; background: rgba(137,42,61,0.05); }
 
 /* Dropdown chevron */
 .has-dropdown > a::after {
