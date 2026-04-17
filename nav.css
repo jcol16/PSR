@@ -24,7 +24,7 @@ nav::after {
   background: linear-gradient(90deg, transparent 0%, #892A3D 20%, #C3A44C 50%, #892A3D 80%, transparent 100%);
   opacity: 0.9;
   box-shadow: 0 0 8px rgba(137,42,61,0.7), 0 0 20px rgba(195,164,76,0.4), 0 0 40px rgba(137,42,61,0.25);
-  z-index: 201;
+  z-index: 1;
   pointer-events: none;
 }
 nav.scrolled {
